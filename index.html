@@ -84,7 +84,7 @@ body.tech-dark .tech-page-pill{background:#2b3c75;color:#d9e2ff}
 .tech-mode{background:#f1f3ff!important;color:#4053aa!important;border:1px solid #dce2fc!important;padding:8px 11px;font-size:12px;font-weight:750;white-space:nowrap}
 @media(max-width:1000px){body.tech-layout{padding-left:210px}.tech-sidebar{width:210px}body.tech-layout>main{padding:24px 19px}body.tech-layout>header{padding:14px 20px}}
 @media(max-width:760px){body.tech-layout{padding-left:0}.tech-sidebar{transform:translateX(-105%);transition:transform .22s;width:255px}.tech-sidebar.open{transform:translateX(0)}.tech-mobile-toggle{display:block}body.tech-layout>header{padding:14px 14px 14px 64px;height:auto;min-height:75px}body.tech-layout>header>span{display:none}body.tech-layout>main{padding:18px 12px}body.tech-layout .panel{padding:17px 14px}.tech-page-title strong{font-size:18px}body.tech-layout #metrics .metric-row{grid-template-columns:repeat(2,minmax(0,1fr))!important}body.tech-layout .tablewrap{overflow-x:auto}}
-</style></head><body><header><div><h1>SmartStock <span style="color:#5fe0bc">| Portfólio</span></h1><small>Estoque, configuração e rastreabilidade</small></div><span style="font-size:12px;background:#245b50;padding:7px 10px;border-radius:20px">Demonstração local v0.26 • Gestão de acessos (prévia)</span></header><main><div class="notice"><b>Protótipo local v0.25:</b> os dados ficam somente neste navegador (localStorage). Não há login, sincronização com Google Sheets ou plataforma de rastreamento. Para dados reais, importe somente no computador autorizado; não publique o arquivo de recebimento no GitHub.</div><nav class="nav" id="nav"><button data-tab="recebimentos">Recebimentos</button><button data-tab="painel" class="active">Painel</button><button data-tab="equipamentos">Rastreadores</button><button data-tab="chips">CHIPs</button><button data-tab="tags">TAGs</button><button data-tab="movimentos">Movimentações</button><button data-tab="protocolos">Protocolos</button><button data-tab="historico">Histórico</button><button data-tab="usuarios">Usuários e permissões</button></nav>
+</style><meta name="theme-color" content="#10182e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="SmartStock"><meta name="mobile-web-app-capable" content="yes"><meta name="application-name" content="SmartStock"><meta name="description" content="SmartStock: gestão de estoque e rastreabilidade de ativos — demonstração pública."><link rel="manifest" href="./manifest.webmanifest"><link rel="apple-touch-icon" href="./icons/icon-180.png"><link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png"></head><body><header><div><h1>SmartStock <span style="color:#5fe0bc">| Portfólio</span></h1><small>Estoque, configuração e rastreabilidade</small></div><span style="font-size:12px;background:#245b50;padding:7px 10px;border-radius:20px">Demonstração local v0.28 • Gestão de acessos (prévia)</span></header><main><div class="notice"><b>Protótipo local v0.25:</b> os dados ficam somente neste navegador (localStorage). Não há login, sincronização com Google Sheets ou plataforma de rastreamento. Para dados reais, importe somente no computador autorizado; não publique o arquivo de recebimento no GitHub.</div><nav class="nav" id="nav"><button data-tab="recebimentos">Recebimentos</button><button data-tab="painel" class="active">Painel</button><button data-tab="equipamentos">Rastreadores</button><button data-tab="chips">CHIPs</button><button data-tab="tags">TAGs</button><button data-tab="movimentos">Movimentações</button><button data-tab="protocolos">Protocolos</button><button data-tab="historico">Histórico</button><button data-tab="usuarios">Usuários e permissões</button></nav>
 <section id="recebimentos" class="hide"><div class="panel"><h2>Importar recebimento de materiais</h2><p>Selecione o arquivo JSON de recebimento. O sistema verificará IMEIs e ICCIDs duplicados e mostrará o resumo antes de confirmar. Quando o arquivo contiver pares planejados IMEI–ICCID, eles serão registrados como <b>associação planejada</b>, sem confirmar vínculo na plataforma.</p><label>Arquivo de recebimento (.json)<input type="file" id="receiptFile" accept=".json,application/json"></label><div id="receiptPreview" class="notice" style="margin-top:14px">Nenhum arquivo selecionado.</div><button id="receiptConfirm" disabled>Confirmar entrada</button><p class="muted">Os registros ficam apenas neste navegador, sem sincronização. Faça backup pelo botão Exportar JSON. Não use GitHub público para armazenar o arquivo de recebimento.</p></div><div class="panel"><h2>Entrada independente de materiais</h2><p class="muted">Cadastre CHIPs, rastreadores e insumos separadamente. O vínculo IMEI–ICCID pode ser realizado depois na aba CHIPs.</p><form id="bulkEntryForm"><label>Tipo de entrada<select name="tipo" id="bulkKind"><option value="chips">CHIPs (ICCID)</option><option value="tags">TAGs (identificador)</option><option value="equipment">Rastreadores (IMEI)</option><option value="supplies">Insumos</option></select></label><label>Unidade<select name="unidade"><option>Unidade Central</option><option>Unidade Norte</option><option>Unidade Sul</option><option>Unidade Leste</option><option>Unidade Oeste</option><option>Unidade Regional</option></select></label><label>Responsável<input name="autor" required placeholder="Nome completo"></label><label id="bulkModelLabel">Modelo do rastreador<input name="modelo" value="J16"></label><label id="bulkMaterialLabel" class="hide">Material<input name="material" placeholder="Cabo, fita..."></label><label id="bulkQtyLabel" class="hide">Quantidade<input name="quantidade" type="number" min="1" step="1" value="1"></label><label class="wide" id="bulkIdsLabel">Identificadores (um por linha)<textarea name="identificadores" rows="5" placeholder="Um ICCID por linha"></textarea></label><button>Registrar entrada</button></form></div><div class="panel"><h2>Estoque geral de materiais</h2><div class="tablewrap"><table><thead><tr><th>Unidade</th><th>Material</th><th>Quantidade</th></tr></thead><tbody id="supplyRows"></tbody></table></div></div><div class="panel"><h2>Entradas registradas</h2><div id="receiptRows"></div></div></section><section id="painel"><div class="cards" id="metrics"></div><div class="panel"><h2>Visão operacional</h2><p>O status técnico e a localização logística são controlados separadamente. Um rastreador <b>pronto</b> pode estar no estoque, com um técnico ou em outra unidade.</p><div id="breakdown"></div></div><div class="panel"><h2>Próximas integrações</h2><p class="muted">Google Forms/Sheets, autenticação individual, banco de dados central, confirmação de instalação e integração autorizada com plataforma de rastreamento.</p></div></section>
 <section id="equipamentos" class="hide"><div class="panel"><h2>Cadastrar rastreador</h2><form id="equipmentForm"><label>IMEI (15 dígitos)<input name="imei" required inputmode="numeric" pattern="[0-9]{15}" maxlength="15" placeholder="15 dígitos"></label><label>Modelo<input name="modelo" required placeholder="J16"></label><label>Origem<select name="origem"><option>Novo</option><option>Reutilizado</option></select></label><label>Status técnico<select name="status"><option>INTERNO</option><option>INTERNO/BLOCK</option><option>INTERNO/SATE</option><option>PRONTO</option><option>DEFEITO</option><option>AGUARDANDO VERIFICAÇÃO</option></select></label><label>Localização<select name="local"><option>Unidade Central</option><option>Unidade Norte</option><option>Unidade Sul</option><option>Unidade Leste</option><option>Unidade Oeste</option><option>Unidade Regional</option><option>Com técnico</option><option>Indisponível</option></select></label><label>Colaborador<input name="autor" required placeholder="Nome do colaborador"></label><button>Cadastrar</button></form></div><div class="panel batch-panel"><details><summary><b>Cadastrar rastreadores em lote</b> <span class="muted">— clique para expandir</span></summary><p class="muted">Cole um IMEI de 15 dígitos por linha. Modelo, origem, status e local serão aplicados a todos. Nenhum registro será salvo se houver identificadores inválidos ou duplicados.</p><form id="equipmentBatchForm" class="batch-form"><label class="batch-identifiers">IMEIs (um por linha)<textarea name="imeis" required rows="6" placeholder="Cole os IMEIs aqui, um por linha"></textarea></label><label>Modelo<input name="modelo" required placeholder="J16"></label><label>Origem<select name="origem"><option>Novo</option><option>Reutilizado</option></select></label><label>Status técnico<select name="status"><option>INTERNO</option><option>INTERNO/BLOCK</option><option>INTERNO/SATE</option><option>PRONTO</option><option>DEFEITO</option><option>AGUARDANDO VERIFICAÇÃO</option></select></label><label>Localização<select name="local"><option>Unidade Central</option><option>Unidade Norte</option><option>Unidade Sul</option><option>Unidade Leste</option><option>Unidade Oeste</option><option>Unidade Regional</option><option>Com técnico</option><option>Indisponível</option></select></label><label>Colaborador<input name="autor" required placeholder="Nome do colaborador"></label><button type="submit">Validar e cadastrar lote</button></form></details></div><div class="panel"><div class="toolbar"><h2>Rastreadores</h2><input id="eqSearch" placeholder="Buscar IMEI ou modelo"></div><div class="tablewrap"><table><thead><tr><th>IMEI</th><th>Modelo / origem</th><th>Status técnico</th><th>Local</th><th>CHIP vinculado</th><th>Alterar status</th></tr></thead><tbody id="eqRows"></tbody></table></div></div></section>
 <section id="chips" class="hide"><div class="panel"><h2>Cadastrar CHIP</h2><form id="chipForm"><label>ICCID (19–22 dígitos)<input name="iccid" required pattern="[0-9]{19,22}" maxlength="22"></label><label>Número da linha<input name="linha" required placeholder="DDD + número"></label><label>Operadora<select name="operadora"><option>Vivo</option><option>Claro</option><option>Outra</option></select></label><label>Colaborador<input name="autor" required></label><button>Cadastrar</button></form></div><div class="panel batch-panel"><details><summary><b>Cadastrar CHIPs em lote</b> <span class="muted">— clique para expandir</span></summary><p class="muted">Cole um ICCID por linha. Opcionalmente, informe o número da linha após ponto e vírgula: <code>ICCID;DDD+número</code>. Quando não informado, o número ficará como “Não informado”. Nenhum CHIP será associado automaticamente a um rastreador.</p><form id="chipBatchForm" class="batch-form"><label class="batch-identifiers">ICCID; número da linha (opcional)<textarea name="itens" required rows="6" placeholder="Cole um ICCID por linha ou ICCID;DDD+número"></textarea></label><label>Operadora<select name="operadora"><option>Vivo</option><option>Claro</option><option>Outra</option></select></label><label>Colaborador<input name="autor" required placeholder="Nome do colaborador"></label><button type="submit">Validar e cadastrar lote</button></form></details></div><div class="panel"><h2>Associar / corrigir CHIP</h2><form id="linkForm"><label>ICCID<select id="linkIccid" name="iccid" required></select></label><label>IMEI de destino<select id="linkImei" name="imei" required></select></label><label>Colaborador<input name="autor" required></label><button>Registrar novo vínculo</button></form><p class="muted">A correção exige justificativa e é auditada. <b>Atenção: nesta versão não existe controle de permissões.</b> A associação no SmartStock não altera a plataforma externa.</p></div><div class="panel"><h2>CHIPs cadastrados</h2><div class="tablewrap"><table><thead><tr><th>ICCID</th><th>Linha</th><th>Operadora</th><th>Vínculo atual</th><th>Situação</th><th>Ação</th></tr></thead><tbody id="chipRows"></tbody></table></div></div></section>
@@ -339,7 +339,7 @@ arrangeMetricsV18();
   nav.parentNode.removeChild(nav);aside.appendChild(nav);
   const icons={recebimentos:'⇩',painel:'▦',equipamentos:'◈',chips:'▤',tags:'◇',movimentos:'⇄',protocolos:'▣',historico:'◷',usuarios:'♙'};
   nav.querySelectorAll('button[data-tab]').forEach(b=>{const ic=document.createElement('span');ic.className='tech-icon';ic.setAttribute('aria-hidden','true');ic.textContent=icons[b.dataset.tab]||'•';b.prepend(ic);b.addEventListener('click',()=>{aside.classList.remove('open');updateTitle(b.dataset.tab)})});
-  const foot=document.createElement('div');foot.className='tech-sidebar-footer';foot.textContent='SmartStock v0.26 • Modern Tech\nProtótipo local — acesso não autenticado';aside.appendChild(foot);
+  const foot=document.createElement('div');foot.className='tech-sidebar-footer';foot.textContent='SmartStock v0.28 • Modern Tech\nProtótipo local — acesso não autenticado';aside.appendChild(foot);
   document.body.prepend(aside);
   const toggle=document.createElement('button');toggle.type='button';toggle.className='tech-mobile-toggle';toggle.textContent='☰';toggle.setAttribute('aria-label','Abrir menu');toggle.onclick=()=>aside.classList.toggle('open');document.body.prepend(toggle);
   const main=document.querySelector('main');const title=document.createElement('div');title.className='tech-page-title';title.innerHTML='<div><strong id="tech-current-title">Painel operacional</strong><small>Plataforma Unificada de Gestão, Operações e Rastreabilidade</small></div><span class="tech-page-pill">AMBIENTE LOCAL</span>';const notice=main.querySelector('.notice');notice.after(title);
@@ -348,8 +348,8 @@ arrangeMetricsV18();
   function updateTitle(tab){const t=document.getElementById('tech-current-title');if(t)t.textContent=names[tab]||'SmartStock'}
   const current=nav.querySelector('button.active');if(current)updateTitle(current.dataset.tab);
   const footer=document.querySelector('body>footer');if(footer)footer.textContent='© 2026 Pedro Henrique Gonçalves. Todos os direitos reservados. Smart Stock — Plataforma Unificada de Gestão, Operações e Rastreabilidade.';
-  const noticeText=main.querySelector('.notice');if(noticeText)noticeText.innerHTML='<b>Ambiente local de desenvolvimento (v0.25):</b> dados armazenados somente neste navegador (localStorage). O layout de usuários é demonstrativo; ainda não existe autenticação, controle de permissões ou sincronização entre unidades. Não publique backups ou dados reais no GitHub.';
-  const badge=header.querySelector(':scope > span');if(badge)badge.textContent='v0.26 • Modern Tech';
+  const noticeText=main.querySelector('.notice');if(noticeText)noticeText.innerHTML='<b>Ambiente local de desenvolvimento (v0.28):</b> dados armazenados somente neste navegador (localStorage). O layout de usuários é demonstrativo; ainda não existe autenticação, controle de permissões ou sincronização entre unidades. Não publique backups ou dados reais no GitHub.';
+  const badge=header.querySelector(':scope > span');if(badge)badge.textContent='v0.28 • Modern Tech';
  };
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
@@ -466,7 +466,7 @@ body.tech-dark #portfolioMetrics .pmetric strong{color:#e2e8f0}
 </script>
 
 <style id="smartstock-v026-layout">
-/* v0.26: grade única sem linhas internas que comprimiam os indicadores */
+/* v0.28: grade única sem linhas internas que comprimiam os indicadores */
 body.tech-layout #painel #metrics, #painel #metrics{
  display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,195px),1fr))!important;
  gap:14px!important;align-items:stretch!important;width:100%!important;
@@ -522,5 +522,89 @@ arrangeMetricsV18=function(){
  container.replaceChildren(fragment);
 };
 arrangeMetricsV18();
+</script>
+
+<style id="smartstock-mobile-v027">
+/* Camada responsiva: não altera dados nem funções do estoque. */
+.mobile-backdrop,.mobile-bottom-nav{display:none}
+@media(max-width:760px){
+ html{overflow-x:hidden}body.tech-layout{width:100%;overflow-x:hidden;padding-bottom:calc(78px + env(safe-area-inset-bottom))}
+ body.tech-layout>header{padding:13px 12px 13px 58px!important;min-height:69px;gap:8px;flex-wrap:nowrap}
+ body.tech-layout>header h1{font-size:17px!important;line-height:1.25}
+ body.tech-layout>header small{font-size:10px}
+ body.tech-layout>header>span{display:none!important}
+ body.tech-layout>header .tech-mode{font-size:0!important;min-width:40px;min-height:40px;padding:8px!important;flex-shrink:0}
+ body.tech-layout>header .tech-mode::first-letter{font-size:19px}
+ body.tech-layout>main{width:100%;max-width:100%;padding:14px 12px 8px!important;margin:0 auto;min-width:0}
+ body.tech-layout .tech-page-title{gap:8px;flex-wrap:wrap;min-width:0}
+ body.tech-layout .tech-page-title small{font-size:11px;line-height:1.45}
+ body.tech-layout .tech-page-pill{font-size:10px;white-space:normal}
+ body.tech-layout .notice{font-size:12px;line-height:1.5;padding:11px 12px}
+ body.tech-layout .panel{min-width:0;max-width:100%;padding:15px 12px!important;overflow-wrap:anywhere}
+ body.tech-layout form{grid-template-columns:minmax(0,1fr)!important;gap:11px}
+ body.tech-layout form label,body.tech-layout form input,body.tech-layout form select,body.tech-layout form textarea{width:100%;min-width:0;max-width:100%}
+ body.tech-layout input,body.tech-layout select,body.tech-layout textarea{font-size:16px;min-height:44px}
+ body.tech-layout textarea{min-height:80px}
+ body.tech-layout button{touch-action:manipulation}
+ body.tech-layout .toolbar{align-items:stretch;gap:10px}
+ body.tech-layout .toolbar input{width:100%!important}
+ body.tech-layout .toolbar button{min-height:42px}
+ body.tech-layout .tablewrap{width:100%;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+ body.tech-layout .tablewrap table{min-width:580px}
+ body.tech-layout .rowactions{flex-wrap:wrap}
+ body.tech-layout #portfolioHero{min-width:0}
+ body.tech-layout #portfolioCharts{min-width:0}
+ body.tech-layout #portfolioCharts>*{min-width:0}
+ body.tech-layout .access-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ body.tech-layout .access-stat{padding:12px!important;min-width:0}
+ body.tech-layout .access-stat strong{font-size:22px}
+ body.tech-layout .batch-form label{min-width:0;flex-basis:100%}
+ body.tech-layout .batch-form button{min-width:0;width:100%}
+ body.tech-layout .tech-sidebar{z-index:105;width:min(85vw,310px);max-width:310px;overflow-y:auto;overscroll-behavior:contain}
+ body.tech-layout .tech-mobile-toggle{position:fixed;z-index:100;top:12px;left:10px;width:40px;height:42px;padding:8px!important;display:grid;place-items:center}
+ .mobile-backdrop{display:block;position:fixed;inset:0;background:#08142bb3;z-index:103;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s}
+ body.mobile-menu-open .mobile-backdrop{opacity:1;visibility:visible}
+ body.mobile-menu-open{overflow:hidden}
+ .mobile-bottom-nav{display:grid;position:fixed;z-index:90;bottom:0;left:0;right:0;grid-template-columns:repeat(5,minmax(0,1fr));background:#fff;border-top:1px solid #dfe7f5;box-shadow:0 -5px 24px #0f172a15;padding:7px 4px calc(7px + env(safe-area-inset-bottom));gap:2px}
+ .mobile-bottom-nav button,.mobile-bottom-nav button:not(:disabled){background:transparent!important;color:#65728d!important;border:0!important;box-shadow:none!important;min-width:0;min-height:48px;border-radius:10px!important;padding:5px 1px!important;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;font-size:10px!important;line-height:1.15}
+ .mobile-bottom-nav button .mob-icon{font-size:20px;line-height:1.1}
+ .mobile-bottom-nav button.active,.mobile-bottom-nav button.active:not(:disabled){background:#eaf0ff!important;color:#345bdc!important}
+ body.tech-dark .mobile-bottom-nav{background:#17233c;border-color:#35415b}
+ body.tech-dark .mobile-bottom-nav button{color:#b4c0d9!important}
+ body.tech-dark .mobile-bottom-nav button.active{background:#263d70!important;color:#c4d6ff!important}
+ body.tech-layout footer{padding:0 12px 8px;font-size:11px}
+}
+@media(max-width:390px){body.tech-layout #painel #metrics>.card{padding:11px!important}body.tech-layout #painel #metrics>.card .muted{font-size:11px!important}body.tech-layout #painel #metrics>.card strong{font-size:24px!important}.mobile-bottom-nav button{font-size:9px!important}}
+@media(min-width:761px){.mobile-backdrop,.mobile-bottom-nav{display:none!important}}
+</style>
+<script id="smartstock-mobile-v027-script">
+(function(){
+ function init(){
+  const aside=document.querySelector('.tech-sidebar'),nav=document.getElementById('nav');
+  if(!aside||!nav||document.querySelector('.mobile-bottom-nav'))return;
+  const backdrop=document.createElement('div');backdrop.className='mobile-backdrop';backdrop.setAttribute('aria-hidden','true');document.body.appendChild(backdrop);
+  const bottom=document.createElement('nav');bottom.className='mobile-bottom-nav';bottom.setAttribute('aria-label','Acesso rápido no celular');
+  const tabs=[['painel','▦','Painel'],['recebimentos','⇩','Receber'],['equipamentos','◈','Estoque'],['movimentos','⇄','Movimentos'],['menu','☰','Menu']];
+  function closeMenu(){aside.classList.remove('open');document.body.classList.remove('mobile-menu-open');const t=document.querySelector('.tech-mobile-toggle');if(t)t.setAttribute('aria-expanded','false')}
+  function sync(){const current=nav.querySelector('button.active')?.dataset.tab;bottom.querySelectorAll('button[data-tab]').forEach(b=>{const active=b.dataset.tab===current;b.classList.toggle('active',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')})}
+  for(const [id,ic,label] of tabs){const b=document.createElement('button');b.type='button';b.dataset.tab=id;b.innerHTML='<span class="mob-icon" aria-hidden="true">'+ic+'</span><span>'+label+'</span>';b.addEventListener('click',()=>{if(id==='menu'){const t=document.querySelector('.tech-mobile-toggle');t?.click();return}const target=nav.querySelector('button[data-tab="'+id+'"]');target?.click();closeMenu();sync();window.scrollTo({top:0,behavior:'instant'})});bottom.appendChild(b)}
+  document.body.appendChild(bottom);backdrop.addEventListener('click',closeMenu);
+  const toggle=document.querySelector('.tech-mobile-toggle');if(toggle){toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-controls','nav');toggle.addEventListener('click',()=>{document.body.classList.toggle('mobile-menu-open',aside.classList.contains('open'));toggle.setAttribute('aria-expanded',String(aside.classList.contains('open')))})}
+  nav.addEventListener('click',()=>{closeMenu();setTimeout(sync,0)});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
+  const badge=document.querySelector('body>header>span');if(badge)badge.textContent='v0.28 • Mobile Responsivo';
+  const sidefoot=document.querySelector('.tech-sidebar-footer');if(sidefoot)sidefoot.textContent=sidefoot.textContent.replace('v0.28','v0.28');
+  sync();
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+<script id="smartstock-pwa-v028">
+// Cache only the public application shell. Never cache imported inventory, backups, or API responses.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js', {scope:'./'}).catch(err => console.warn('PWA indisponível:', err));
+  });
+}
 </script>
 </body></html>

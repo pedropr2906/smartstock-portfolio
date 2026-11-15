@@ -1,15 +1,17 @@
-# SmartStock — Portfólio v0.25
+# SmartStock v0.28 — PWA Mobile
 
-Demonstração pública de uma plataforma autoral de estoque, rastreabilidade e logística reversa.
+Demonstração pública independente. Esta versão mantém o HTML e os dados do v0.27 e acrescenta um Web App Manifest, ícones e Service Worker para instalação e abertura offline da interface.
 
-## Módulos
-Painel executivo com indicadores e gráficos; recebimentos; rastreadores novos e reutilizados; CHIPs; TAGs; movimentações; protocolos; histórico; prévia de usuários e permissões; Logística Reversa com ciclos de vida por IMEI.
+## Publicação GitHub Pages
 
-## Executar
-Abra `index.html` ou publique os arquivos na raiz de um repositório GitHub Pages. Clique em **Carregar dados fictícios** para popular o painel sem inserir dados reais.
+Envie **todos** os arquivos e a pasta `icons/` para a raiz do repositório `smartstock-portfolio` na branch `main` (mantendo `index.html` na raiz). Preserve `.nojekyll`. Aguarde o Pages concluir a publicação. No celular, abra `https://pedropr2906.github.io/smartstock-portfolio/` usando HTTPS.
+
+Android Chrome: menu ⋮ > **Instalar app** ou **Adicionar à tela inicial**. iPhone Safari: Compartilhar > **Adicionar à Tela de Início**. Os nomes das opções variam por navegador e sistema.
 
 ## Limitações
-Protótipo HTML/CSS/JavaScript com `localStorage`, sem autenticação, backend ou auditoria imutável. Dados demonstrativos são fictícios. Não usar em produção nem publicar dados reais. A integração com Supabase/PostgreSQL está em desenvolvimento, fora deste HTML.
 
-## Autoria
-© 2026 Pedro Henrique Gonçalves. Todos os direitos reservados.
+A PWA **não** acrescenta autenticação, backend, sincronização, segurança de dados ou backup automático. O armazenamento continua em `localStorage`, por origem e navegador. A interface pode abrir offline após ter sido carregada, mas dados não sincronizam entre aparelhos. Não insira dados operacionais reais no portfólio público.
+
+## Próxima etapa: SAVCAR
+
+Aplicar o padrão PWA/mobile na versão empresarial **sobre o HTML completo da SAVCAR**, sem substituir módulos, marca, integrações ou dados existentes. Avaliar autenticação e armazenamento seguro antes de uso real.

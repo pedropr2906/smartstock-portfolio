@@ -1,15 +1,15 @@
-# SmartStock — Portfólio demonstrativo
+# SmartStock — Portfólio v0.25
 
-Plataforma de gestão de estoque, rastreadores novos, CHIPs, TAGs, recebimentos, movimentações, protocolos, histórico, prévia de perfis e Logística Reversa.
+Demonstração pública de uma plataforma autoral de estoque, rastreabilidade e logística reversa.
 
-**Autor:** Pedro Henrique Gonçalves.
+## Módulos
+Painel executivo com indicadores e gráficos; recebimentos; rastreadores novos e reutilizados; CHIPs; TAGs; movimentações; protocolos; histórico; prévia de usuários e permissões; Logística Reversa com ciclos de vida por IMEI.
 
-## Publicação
-Envie `index.html` e `README.md` a um repositório público separado. Ative GitHub Pages em Settings → Pages → Deploy from branch → main → / (root).
+## Executar
+Abra `index.html` ou publique os arquivos na raiz de um repositório GitHub Pages. Clique em **Carregar dados fictícios** para popular o painel sem inserir dados reais.
 
-## Avisos
-- Demonstração front-end com `localStorage`, **sem autenticação, banco central ou sincronização**.
-- Os cadastros e registros são locais ao navegador, não auditoria imutável.
-- Não inserir dados reais de clientes, técnicos, veículos, IMEIs ou ICCIDs no portfólio público.
-- O módulo de Logística Reversa registra ciclos por IMEI, retirada, recebimento e configuração. Não modifica automaticamente as outras tabelas do protótipo.
-- Baseado no HTML histórico v0.23 disponível, ampliado para portfólio v0.24.
+## Limitações
+Protótipo HTML/CSS/JavaScript com `localStorage`, sem autenticação, backend ou auditoria imutável. Dados demonstrativos são fictícios. Não usar em produção nem publicar dados reais. A integração com Supabase/PostgreSQL está em desenvolvimento, fora deste HTML.
+
+## Autoria
+© 2026 Pedro Henrique Gonçalves. Todos os direitos reservados.

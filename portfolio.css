@@ -68,3 +68,9 @@
   .stock th, .stock td { white-space: nowrap; }
   .stock output, .stock #historico { overflow-wrap: anywhere; }
 }
+
+main p:not([role="status"]), main figcaption {
+  text-align: justify;
+  text-align-last: start;
+  hyphens: auto;
+}

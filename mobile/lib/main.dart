@@ -5,17 +5,42 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 const title = String.fromEnvironment('APP_NAME', defaultValue: 'SmartStock');
 const source = String.fromEnvironment('APP_URL');
-void main() => runApp(MaterialApp(title: title, home: const StockScreen()));
+void main() => runApp(MaterialApp(title: title, home: source.isEmpty ? const PilotAddress() : const StockScreen(address: source)));
+
+class PilotAddress extends StatefulWidget {
+  const PilotAddress({super.key});
+  @override
+  State<PilotAddress> createState() => PilotAddressState();
+}
+class PilotAddressState extends State<PilotAddress> {
+  String value = '';
+  String? error;
+  @override
+  Widget build(BuildContext context) => Scaffold(appBar:AppBar(title:const Text(title)),
+    body:SafeArea(child:ListView(padding:const EdgeInsets.all(20),children:[
+      TextField(keyboardType:TextInputType.url,autocorrect:false,
+        decoration:InputDecoration(labelText:'Endereço HTTPS do piloto',errorText:error),
+        onChanged:(v)=>value=v.trim()),
+      ElevatedButton(child:const Text('Abrir piloto'),onPressed:(){
+        final uri=Uri.tryParse(value);
+        if(uri==null || uri.scheme!='https' || uri.host.isEmpty || uri.userInfo.isNotEmpty || uri.hasQuery || uri.hasFragment){
+          setState(()=>error='Informe o endereço HTTPS da sua instalação.');return;
+        }
+        Navigator.push(context,MaterialPageRoute(builder:(_)=>StockScreen(address:uri.toString())));
+      }),
+    ])));
+}
 
 class StockScreen extends StatefulWidget {
-  const StockScreen({super.key});
+  final String address;
+  const StockScreen({super.key, required this.address});
   @override
   State<StockScreen> createState() => StockState();
 }
 
 class StockState extends State<StockScreen> {
   late final WebViewController web;
-  final home = Uri.tryParse(source);
+  late final home = Uri.tryParse(widget.address);
   bool failed = false;
   bool get valid => home != null && home!.scheme == 'https' && home!.host.isNotEmpty && home!.userInfo.isEmpty;
   bool allowed(String url) {

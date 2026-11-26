@@ -60,3 +60,11 @@
 .stock .table-wrap { overflow-x: auto; }
 .stock table { border-collapse: collapse; width: 100%; margin-top: 16px; }
 .stock td, .stock th { text-align: left; padding: 8px; border-bottom: 1px solid #394a68; }
+@media (max-width: 640px) {
+  .stock section { padding: 12px; min-width: 0; }
+  .stock input, .stock select, .stock button { min-height: 44px; max-width: 100%; font-size: 16px; }
+  .stock .operation-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .stock .table-wrap { max-width: 100%; }
+  .stock th, .stock td { white-space: nowrap; }
+  .stock output, .stock #historico { overflow-wrap: anywhere; }
+}

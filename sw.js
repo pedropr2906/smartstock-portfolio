@@ -1,5 +1,5 @@
 /* SmartStock PWA v0.30 — public app shell only. */
-const CACHE = 'smartstock-public-shell-v031';
+const CACHE = 'smartstock-public-shell-v032';
 const SHELL = ['./estoque.html', './estoque.js', './index.html', './demo.html', './portfolio.css', './portfolio.js', './operations.js', './preview.png', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-180.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(SHELL)).then(() => self.skipWaiting()));

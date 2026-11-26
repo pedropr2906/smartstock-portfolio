@@ -48,3 +48,15 @@
   .portfolio .wrap { width: calc(100% - 32px); }
   .site-head, .site-foot { flex-wrap: wrap; gap: 12px; }
 }
+
+.stock { padding-bottom: 48px; }
+.stock section { margin: 24px 0; padding: 18px; border: 1px solid #394a68; border-radius: 14px; background: #17233c; }
+.stock h2 { margin-top: 0; }
+.stock form, .stock label { display: grid; gap: 6px; }
+.stock form { gap: 12px; }
+.stock [hidden] { display: none; }
+.stock input, .stock select, .stock button { min-width: 0; border: 1px solid #51627e; border-radius: 6px; padding: 9px; font: inherit; }
+.stock button { background: #82e8d2; color: #10182e; font-weight: 700; cursor: pointer; }
+.stock .table-wrap { overflow-x: auto; }
+.stock table { border-collapse: collapse; width: 100%; margin-top: 16px; }
+.stock td, .stock th { text-align: left; padding: 8px; border-bottom: 1px solid #394a68; }

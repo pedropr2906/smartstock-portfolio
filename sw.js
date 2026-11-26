@@ -1,6 +1,6 @@
 /* SmartStock PWA v0.30 — public app shell only. */
-const CACHE = 'smartstock-public-shell-v030';
-const SHELL = ['./index.html', './demo.html', './portfolio.css', './portfolio.js', './operations.js', './preview.png', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-180.png'];
+const CACHE = 'smartstock-public-shell-v031';
+const SHELL = ['./estoque.html', './estoque.js', './index.html', './demo.html', './portfolio.css', './portfolio.js', './operations.js', './preview.png', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-180.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(SHELL)).then(() => self.skipWaiting()));
 });
@@ -13,7 +13,7 @@ self.addEventListener('fetch', event => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin || !url.pathname.startsWith(new URL(self.registration.scope).pathname)) return;
   if (req.mode === 'navigate') {
-    event.respondWith(fetch(req).catch(() => caches.match(url.pathname.endsWith('/demo.html') ? './demo.html' : './index.html')));
+    event.respondWith(fetch(req).catch(() => caches.match(SHELL.find(path => path.endsWith('.html') && new URL(path, self.registration.scope).pathname === url.pathname) || './index.html')));
     return;
   }
   const asset = SHELL.find(path => new URL(path, self.registration.scope).pathname === url.pathname);

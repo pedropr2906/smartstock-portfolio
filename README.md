@@ -1,17 +1,21 @@
-# SmartStock v0.28 — PWA Mobile
+# SmartStock
 
-Demonstração pública independente. Esta versão mantém o HTML e os dados do v0.27 e acrescenta um Web App Manifest, ícones e Service Worker para instalação e abertura offline da interface.
+**Estoque, custódia e rastreabilidade de ativos**
+Projeto de portfólio de Pedro Henrique Gonçalves.
 
-## Publicação GitHub Pages
+[Conhecer o projeto](https://pedropr2906.github.io/smartstock-portfolio/) · [Abrir a demonstração](https://pedropr2906.github.io/smartstock-portfolio/demo.html)
 
-Envie **todos** os arquivos e a pasta `icons/` para a raiz do repositório `smartstock-portfolio` na branch `main` (mantendo `index.html` na raiz). Preserve `.nojekyll`. Aguarde o Pages concluir a publicação. No celular, abra `https://pedropr2906.github.io/smartstock-portfolio/` usando HTTPS.
+![Ilustração do painel com indicadores de estoque e dados fictícios](preview.png)
 
-Android Chrome: menu ⋮ > **Instalar app** ou **Adicionar à tela inicial**. iPhone Safari: Compartilhar > **Adicionar à Tela de Início**. Os nomes das opções variam por navegador e sistema.
+## Teste os fluxos
 
-## Limitações
+1. Abra a demonstração e carregue o cenário fictício no painel.
+2. Consulte rastreadores, chips e tags, ou cadastre uma entrada em **Lotes e transferências**.
+3. Envie um rastreador entre unidades e confirme ou recuse o recebimento. Confira o local e o histórico após a conferência.
+4. Explore os indicadores, os protocolos, os saldos de insumos e a logística reversa.
 
-A PWA **não** acrescenta autenticação, backend, sincronização, segurança de dados ou backup automático. O armazenamento continua em `localStorage`, por origem e navegador. A interface pode abrir offline após ter sido carregada, mas dados não sincronizam entre aparelhos. Não insira dados operacionais reais no portfólio público.
+## Ambiente de demonstração
 
-## Próxima etapa: SAVCAR
+Aplicação estática em HTML, CSS e JavaScript. O cenário fictício é gerado no navegador. As alterações feitas durante a demonstração ficam no navegador usado no teste. Os perfis representam a interface de acesso. Autenticação, sincronização entre dispositivos e controle de permissões no servidor exigem infraestrutura própria.
 
-Aplicar o padrão PWA/mobile na versão empresarial **sobre o HTML completo da SAVCAR**, sem substituir módulos, marca, integrações ou dados existentes. Avaliar autenticação e armazenamento seguro antes de uso real.
+Para executar localmente, sirva a raiz do repositório com `python3 -m http.server 8000` e abra `http://localhost:8000`.

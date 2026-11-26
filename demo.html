@@ -1,0 +1,610 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SmartStock | Portfólio • Demonstração</title><style>
+:root{font-family:Inter,system-ui,Arial,sans-serif;color:#193331;background:#f3f7f6}*{box-sizing:border-box}body{margin:0}header{background:#123d38;color:white;padding:22px max(20px,calc((100vw - 1200px)/2));display:flex;justify-content:space-between;gap:15px;align-items:center}header h1{margin:0;font-size:25px}header small{color:#b5e2d8}main{max-width:1200px;margin:24px auto;padding:0 18px}.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}button,.btn{border:0;border-radius:9px;background:#147a6b;color:white;padding:11px 14px;font-weight:650;cursor:pointer}button:hover{filter:brightness(.94)}.nav button{background:#e2eeea;color:#17473f}.nav button.active{background:#147a6b;color:white}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:12px;margin-bottom:20px}.card,.panel{background:white;border:1px solid #dce9e5;border-radius:13px;padding:18px;box-shadow:0 2px 9px #164b3510}.card strong{display:block;font-size:29px;margin-top:8px}.muted{color:#667b76;font-size:13px}.panel{margin-bottom:16px}h2{margin:0 0 14px;font-size:20px}h3{margin:0 0 10px}form{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;align-items:end}label{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:650}input,select,textarea{border:1px solid #c8d9d3;border-radius:8px;padding:10px;font:inherit;min-width:0;background:white}textarea{min-height:43px}.wide{grid-column:1/-1}.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;border-bottom:1px solid #e5eeeb;padding:11px 9px;white-space:nowrap}th{background:#f3f8f6}.pill{display:inline-block;border-radius:30px;padding:4px 9px;font-size:12px;background:#e9f0ee}.ok{background:#d8f4e6;color:#17633f}.bad{background:#fde3e3;color:#8a2929}.warn{background:#fff1d2;color:#805b0c}.hide{display:none}.toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px}.toolbar input{width:280px}.danger{background:#9b4141}.secondary{background:#e1ece8;color:#194c43}.notice{padding:12px 15px;background:#fff7dc;border:1px solid #f1dfa6;border-radius:10px;margin-bottom:16px;font-size:13px}.toast{position:fixed;right:18px;bottom:18px;background:#153d35;color:white;border-radius:9px;padding:12px 16px;max-width:380px;box-shadow:0 8px 24px #0002;display:none}.rowactions{display:flex;gap:6px}.rowactions button{font-size:12px;padding:6px 8px}footer{font-size:12px;color:#688078;margin:24px 0;text-align:center}@media(max-width:600px){header{padding:17px}header h1{font-size:21px}.toolbar input{width:100%}}
+.audit-select-group{background:#f6faf8;border:1px solid #dce9e5;border-radius:11px;padding:12px;margin:10px 0;max-width:580px}.audit-select-label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}.audit-select{display:block;width:100%;padding:11px 38px 11px 12px;border:1px solid #bcd6cc;border-radius:9px;background-color:white;color:#163d37;font-size:14px;cursor:pointer}.audit-select:focus{outline:2px solid #147a6b;outline-offset:2px}.audit-select-info{margin-top:9px;white-space:normal;overflow-wrap:anywhere}
+.audit-receipt-row td{vertical-align:middle}.audit-receipt-row td:last-child{min-width:310px;max-width:520px;white-space:normal}.audit-receipt-details{border:1px solid #dce9e5;border-radius:11px;background:#f8fbfa;overflow:hidden}.audit-receipt-details>summary{list-style:none;cursor:pointer;padding:13px 15px;display:flex;flex-direction:column;gap:5px;font-weight:700;color:#17473f}.audit-receipt-details>summary::-webkit-details-marker{display:none}.audit-receipt-details>summary:before{content:'▸';float:left;position:absolute;transform:translateX(-11px)}.audit-receipt-details[open]>summary:before{content:'▾'}.audit-receipt-details>summary small{font-size:12px;font-weight:400;color:#667b76}.audit-receipt-content{border-top:1px solid #dce9e5;padding:12px}.audit-group-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}.audit-group-grid .audit-select-group{margin:0;max-width:none}.audit-group-grid .audit-select{width:100%}#entryHistory td:nth-child(3){font-variant-numeric:tabular-nums}#entryHistory td{vertical-align:middle}
+</style><style id="audit-date-style">
+.audit-date-row>td{padding:9px 0!important;white-space:normal!important;border-bottom:0!important}
+.audit-date-details{border:1px solid #dce9e5;border-radius:12px;background:#fff;overflow:hidden}
+.audit-date-details>summary{cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:15px 18px;background:#f3f8f6;list-style:none;color:#17473f}
+.audit-date-details>summary::-webkit-details-marker{display:none}
+.audit-date-details>summary::before{content:'▸';font-size:16px;margin-right:2px}
+.audit-date-details[open]>summary::before{content:'▾'}
+.audit-date-label{font-size:15px;font-weight:750;margin-right:auto}
+.audit-date-count{font-size:12px;color:#667b76}
+.audit-date-body{padding:12px 14px}
+.audit-date-table{width:100%;min-width:820px}
+.audit-date-table th,.audit-date-table td{vertical-align:middle}
+.audit-date-table td:last-child{white-space:normal;min-width:280px}
+</style><style id="metrics-layout-v18">
+/* Cinco linhas independentes, compactas, sem cartões esticados. */
+#metrics{display:flex;flex-direction:column;gap:9px;margin-bottom:18px}
+#metrics .metric-row{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px;width:100%}
+#metrics .card{min-width:0;padding:11px 13px;border-radius:11px;box-shadow:0 2px 6px #164b350a;min-height:74px}
+#metrics .card .muted{font-size:12px;line-height:1.3;display:block}
+#metrics .card strong{font-size:25px;margin-top:5px;line-height:1.2}
+@media(max-width:950px){#metrics .metric-row{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:560px){#metrics .metric-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:350px){#metrics .metric-row{grid-template-columns:1fr}}
+</style><style id="smartstock-batch-css">.batch-panel details>summary{cursor:pointer;padding:3px 0;color:#123c38}.batch-panel details[open]>summary{margin-bottom:14px}.batch-form{display:flex;flex-wrap:wrap;align-items:end;gap:12px}.batch-form label{min-width:170px;flex:1}.batch-form label.batch-identifiers{flex:2 1 100%;min-width:100%}.batch-form textarea{width:100%;resize:vertical;min-height:118px;padding:12px;border:1px solid #cbded7;border-radius:10px;font:inherit;box-sizing:border-box}.batch-form button{min-width:220px}.batch-panel code{font-size:.9em}</style><style id="access-v22">.access-hero{display:flex;justify-content:space-between;gap:18px;align-items:center;flex-wrap:wrap;border-top:4px solid #167c6e}.access-hero h2{font-size:26px;margin:7px 0}.access-hero p{max-width:720px;line-height:1.55}.access-eyebrow{font-size:11px;font-weight:800;letter-spacing:.1em;color:#147a6b}.access-status{background:#fff5d9;border:1px solid #efd79b;color:#7b570a;padding:9px 12px;border-radius:999px;font-size:12px;font-weight:700}.access-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0 0 16px}.access-stat{background:white;border:1px solid #dbe8e3;border-radius:12px;padding:15px 17px;box-shadow:0 2px 7px #153f3010}.access-stat span{display:block;color:#59716b;font-size:12px}.access-stat strong{display:block;font-size:26px;margin-top:6px}.access-toolbar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}.access-disabled{opacity:.55;cursor:not-allowed}.access-table{width:100%;min-width:750px}.access-table td,.access-table th{padding:12px 13px;text-align:left;vertical-align:middle}.access-table small{display:block;color:#657c75;font-size:12px;margin-top:4px}.access-pill{display:inline-block;padding:5px 10px;border-radius:99px;background:#e4f2ed;color:#126f5e;font-size:12px;font-weight:750}.access-pill.root{background:#173f38;color:white}.access-pill.unit{background:#edf2f5;color:#425b6a}.access-warning{background:#fffaf0;border-color:#eedcb4}.access-warning h2{color:#7b5409}@media(max-width:700px){.access-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:420px){.access-stats{grid-template-columns:1fr}}</style><style id="modern-tech-v23">
+:root{--tech-bg:#f2f5fb;--tech-surface:#fff;--tech-ink:#15213c;--tech-muted:#68758f;--tech-blue:#4568f5;--tech-violet:#7c4fe9;--tech-cyan:#06b6d4;--tech-border:#e2e8f4;--tech-sidebar:#10182e;--tech-green:#0d9b81;color:var(--tech-ink);background:var(--tech-bg)}
+body{background:var(--tech-bg);color:var(--tech-ink);font-family:Inter,system-ui,'Segoe UI',Arial,sans-serif}
+body.tech-layout{min-height:100vh;padding-left:252px}
+body.tech-layout>header{height:78px;position:sticky;top:0;z-index:30;background:rgba(255,255,255,.96);color:var(--tech-ink);border-bottom:1px solid var(--tech-border);padding:14px 35px;box-shadow:0 3px 16px #18274c09;max-width:none}
+body.tech-layout>header h1{font-size:21px;letter-spacing:-.7px;color:var(--tech-ink)}
+body.tech-layout>header h1 span{color:var(--tech-blue)!important}
+body.tech-layout>header small{color:var(--tech-muted)}
+body.tech-layout>header>span{background:#edf0ff!important;color:#4958a6!important;font-weight:700;border:1px solid #dce2ff}
+body.tech-layout>main{max-width:1600px;padding:28px 34px 55px;margin:auto}
+.tech-sidebar{position:fixed;left:0;top:0;bottom:0;width:252px;z-index:45;background:linear-gradient(170deg,#101a36,#15112f 70%,#19204a);color:#e8ecff;display:flex;flex-direction:column;box-shadow:12px 0 35px #1d275013}
+.tech-brand{padding:29px 22px 24px;border-bottom:1px solid #ffffff19;display:flex;gap:12px;align-items:center}
+.tech-brand-icon{width:43px;height:43px;border-radius:14px;background:linear-gradient(135deg,var(--tech-blue),var(--tech-violet));display:grid;place-items:center;color:#fff;font-size:21px;font-weight:900;box-shadow:0 6px 22px #4568f555}
+.tech-brand strong{display:block;font-size:18px;letter-spacing:-.6px}.tech-brand small{display:block;font-size:10px;color:#aeb8db;letter-spacing:.6px;text-transform:uppercase;margin-top:3px}
+.tech-menu-label{padding:25px 23px 10px;font-size:10px;font-weight:800;letter-spacing:1.8px;color:#8191bb;text-transform:uppercase}
+.tech-sidebar #nav{display:flex;flex-direction:column;gap:5px;padding:0 11px;margin:0;max-width:none;align-items:stretch;background:transparent;border:0}
+.tech-sidebar #nav button{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 14px;border:1px solid transparent;border-radius:11px;background:transparent;color:#b9c4e4;font-size:13px;font-weight:650;transition:background .15s,color .15s;min-height:43px}
+.tech-sidebar #nav button:hover{background:#ffffff13;color:#fff}
+.tech-sidebar #nav button.active{background:linear-gradient(100deg,#4568f544,#7c4fe92a);border-color:#8b93ff4a;color:#fff;box-shadow:inset 3px 0 0 #65a5ff}
+.tech-sidebar #nav button .tech-icon{font-size:18px;width:23px;text-align:center;font-weight:400}
+.tech-sidebar-footer{margin-top:auto;padding:19px 23px;border-top:1px solid #ffffff17;color:#a6b3d5;font-size:11px;line-height:1.6}
+.tech-mobile-toggle{display:none;position:fixed;z-index:70;left:14px;top:15px;background:#26386d;color:white;border:0;border-radius:10px;padding:9px 12px}
+body.tech-layout .notice{background:#eef2ff;color:#4c5983;border:1px solid #dce4ff;border-left:4px solid var(--tech-blue);border-radius:13px;padding:13px 17px;font-size:12px;line-height:1.65;margin-bottom:22px}
+body.tech-layout .panel{background:var(--tech-surface);border:1px solid var(--tech-border);border-radius:18px;box-shadow:0 5px 23px #213a7210;padding:23px 25px;margin-bottom:18px}
+body.tech-layout h2{color:var(--tech-ink);letter-spacing:-.55px}
+body.tech-layout h3{color:#263555}
+body.tech-layout .muted,body.tech-layout p.muted{color:var(--tech-muted)}
+body.tech-layout input,body.tech-layout select,body.tech-layout textarea{border:1px solid #d7deec;border-radius:10px;background:#fff;color:#172341;box-shadow:none}
+body.tech-layout input:focus,body.tech-layout select:focus,body.tech-layout textarea:focus{outline:2px solid #7385ff70;border-color:#7184fa}
+body.tech-layout button:not(.tech-mobile-toggle):not(.tech-sidebar button){border-radius:10px}
+body.tech-layout button:not(.tech-mobile-toggle):not(.tech-sidebar button):not(:disabled){background:linear-gradient(105deg,#4365e9,#6b58df);color:white;border:0}
+body.tech-layout button:not(.tech-mobile-toggle):not(.tech-sidebar button):hover:not(:disabled){filter:brightness(1.05)}
+body.tech-layout .card{border:1px solid #e2e7f5;background:#fff;box-shadow:0 4px 15px #263d7610;border-radius:13px}
+body.tech-layout #metrics .card{min-height:72px;border-left:3px solid var(--tech-blue)}
+body.tech-layout #metrics .metric-row:nth-child(2) .card{border-left-color:var(--tech-cyan)}
+body.tech-layout #metrics .metric-row:nth-child(3) .card{border-left-color:var(--tech-violet)}
+body.tech-layout #metrics .metric-row:nth-child(4) .card{border-left-color:var(--tech-green)}
+body.tech-layout #metrics .metric-row:nth-child(5) .card{border-left-color:#f59e0b}
+body.tech-layout table{border-collapse:collapse}body.tech-layout th{background:#f1f4fa;color:#334362}body.tech-layout td{border-color:#e8edf6}
+body.tech-layout .audit-date-details,body.tech-layout details{border-color:#dce4f1}
+body.tech-layout .access-hero{border-top:4px solid var(--tech-blue)}
+body.tech-layout .access-eyebrow{color:var(--tech-blue)}
+body.tech-layout .access-status{background:#edf1ff;color:#465cc2;border-color:#d9e1ff}
+body.tech-layout .access-stat{border-color:#e2e8f4}
+body.tech-layout footer{color:#8792a8;font-size:11px;text-align:center;padding:24px 12px}
+.tech-page-title{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:17px}
+.tech-page-title strong{font-size:22px;letter-spacing:-.7px}.tech-page-title small{display:block;font-size:12px;color:var(--tech-muted);margin-top:5px}
+.tech-page-pill{font-size:11px;font-weight:800;color:#4464d3;background:#e9edff;padding:8px 12px;border-radius:20px}
+body.tech-dark{--tech-bg:#0d1426;--tech-surface:#18223a;--tech-ink:#ecf1ff;--tech-muted:#9aaac9;--tech-border:#303c59;color:var(--tech-ink)}
+body.tech-dark>header{background:#17223a;color:#ecf1ff}body.tech-dark>header h1{color:#ecf1ff}
+body.tech-dark .panel,body.tech-dark .card{background:#18223a;color:#ecf1ff;border-color:#303c59}
+body.tech-dark th{background:#23304c;color:#e1e9ff}body.tech-dark td{color:#e4ebfc;border-color:#33415d}
+body.tech-dark input,body.tech-dark select,body.tech-dark textarea{background:#1c2944;color:#fff;border-color:#445473}
+body.tech-dark .notice{background:#1d2b51;color:#d4ddff;border-color:#3b5091}
+body.tech-dark details,body.tech-dark .audit-date-details{background:#1b2842;color:#eef3ff}
+body.tech-dark .tech-page-pill{background:#2b3c75;color:#d9e2ff}
+.tech-mode{background:#f1f3ff!important;color:#4053aa!important;border:1px solid #dce2fc!important;padding:8px 11px;font-size:12px;font-weight:750;white-space:nowrap}
+@media(max-width:1000px){body.tech-layout{padding-left:210px}.tech-sidebar{width:210px}body.tech-layout>main{padding:24px 19px}body.tech-layout>header{padding:14px 20px}}
+@media(max-width:760px){body.tech-layout{padding-left:0}.tech-sidebar{transform:translateX(-105%);transition:transform .22s;width:255px}.tech-sidebar.open{transform:translateX(0)}.tech-mobile-toggle{display:block}body.tech-layout>header{padding:14px 14px 14px 64px;height:auto;min-height:75px}body.tech-layout>header>span{display:none}body.tech-layout>main{padding:18px 12px}body.tech-layout .panel{padding:17px 14px}.tech-page-title strong{font-size:18px}body.tech-layout #metrics .metric-row{grid-template-columns:repeat(2,minmax(0,1fr))!important}body.tech-layout .tablewrap{overflow-x:auto}}
+</style><meta name="theme-color" content="#10182e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="SmartStock"><meta name="mobile-web-app-capable" content="yes"><meta name="application-name" content="SmartStock"><meta name="description" content="SmartStock: gestão de estoque e rastreabilidade de ativos — demonstração pública."><link rel="manifest" href="./manifest.webmanifest"><link rel="apple-touch-icon" href="./icons/icon-180.png"><link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png"><link rel="stylesheet" href="./portfolio.css"></head><body><header><div><h1>SmartStock <span style="color:#5fe0bc">| Portfólio</span></h1><small>Estoque, configuração e rastreabilidade</small></div><span style="font-size:12px;background:#245b50;padding:7px 10px;border-radius:20px">Dados fictícios</span></header><main><a class="back-portfolio" href="./index.html">← Voltar ao portfólio</a><div class="notice"><b>Protótipo local v0.25:</b> os dados ficam somente neste navegador (localStorage). Não há login, sincronização com Google Sheets ou plataforma de rastreamento. Use apenas dados fictícios.</div><nav class="nav" id="nav"><button data-tab="operacoes">Lotes e transferências</button><button data-tab="recebimentos">Recebimentos</button><button data-tab="painel" class="active">Painel</button><button data-tab="equipamentos">Rastreadores</button><button data-tab="chips">CHIPs</button><button data-tab="tags">TAGs</button><button data-tab="movimentos">Movimentações</button><button data-tab="protocolos">Protocolos</button><button data-tab="historico">Histórico</button><button data-tab="usuarios">Usuários e permissões</button></nav>
+<section id="recebimentos" class="hide"><div class="panel"><h2>Importar recebimento de materiais</h2><p>Selecione o arquivo JSON de recebimento. O sistema verificará IMEIs e ICCIDs duplicados e mostrará o resumo antes de confirmar. Quando o arquivo contiver pares planejados IMEI–ICCID, eles serão registrados como <b>associação planejada</b>, sem confirmar vínculo na plataforma.</p><label>Arquivo de recebimento (.json)<input type="file" id="receiptFile" accept=".json,application/json"></label><div id="receiptPreview" class="notice" style="margin-top:14px">Nenhum arquivo selecionado.</div><button id="receiptConfirm" disabled>Confirmar entrada</button><p class="muted">Os registros ficam apenas neste navegador, sem sincronização. Faça backup pelo botão Exportar JSON. Não use GitHub público para armazenar o arquivo de recebimento.</p></div><div class="panel"><h2>Entrada independente de materiais</h2><p class="muted">Cadastre CHIPs, rastreadores e insumos separadamente. O vínculo IMEI–ICCID pode ser realizado depois na aba CHIPs.</p><form id="bulkEntryForm"><label>Tipo de entrada<select name="tipo" id="bulkKind"><option value="chips">CHIPs (ICCID)</option><option value="tags">TAGs (identificador)</option><option value="equipment">Rastreadores (IMEI)</option><option value="supplies">Insumos</option></select></label><label>Unidade<select name="unidade"><option>Unidade Central</option><option>Unidade Norte</option><option>Unidade Sul</option><option>Unidade Leste</option><option>Unidade Oeste</option><option>Unidade Regional</option></select></label><label>Responsável<input name="autor" required placeholder="Nome completo"></label><label id="bulkModelLabel">Modelo do rastreador<input name="modelo" value="J16"></label><label id="bulkMaterialLabel" class="hide">Material<input name="material" placeholder="Cabo, fita..."></label><label id="bulkQtyLabel" class="hide">Quantidade<input name="quantidade" type="number" min="1" step="1" value="1"></label><label class="wide" id="bulkIdsLabel">Identificadores (um por linha)<textarea name="identificadores" rows="5" placeholder="Um ICCID por linha"></textarea></label><button>Registrar entrada</button></form></div><div class="panel"><h2>Estoque geral de materiais</h2><div class="tablewrap"><table><thead><tr><th>Unidade</th><th>Material</th><th>Quantidade</th></tr></thead><tbody id="supplyRows"></tbody></table></div></div><div class="panel"><h2>Entradas registradas</h2><div id="receiptRows"></div></div></section><section id="painel"><div class="cards" id="metrics"></div><div class="panel"><h2>Visão operacional</h2><p>O status técnico e a localização logística são controlados separadamente. Um rastreador <b>pronto</b> pode estar no estoque, com um técnico ou em outra unidade.</p><div id="breakdown"></div></div><div class="panel"><h2>Próximas integrações</h2><p class="muted">Google Forms/Sheets, autenticação individual, banco de dados central, confirmação de instalação e integração autorizada com plataforma de rastreamento.</p></div></section>
+<section id="equipamentos" class="hide"><div class="panel"><h2>Cadastrar rastreador</h2><form id="equipmentForm"><label>IMEI (15 dígitos)<input name="imei" required inputmode="numeric" pattern="[0-9]{15}" maxlength="15" placeholder="15 dígitos"></label><label>Modelo<input name="modelo" required placeholder="J16"></label><label>Origem<select name="origem"><option>Novo</option><option>Reutilizado</option></select></label><label>Status técnico<select name="status"><option>INTERNO</option><option>INTERNO/BLOQUEIO</option><option>INTERNO/BANCADA</option><option>PRONTO</option><option>DEFEITO</option><option>AGUARDANDO VERIFICAÇÃO</option></select></label><label>Localização<select name="local"><option>Unidade Central</option><option>Unidade Norte</option><option>Unidade Sul</option><option>Unidade Leste</option><option>Unidade Oeste</option><option>Unidade Regional</option><option>Com técnico</option><option>Indisponível</option></select></label><label>Colaborador<input name="autor" required placeholder="Nome do colaborador"></label><button>Cadastrar</button></form></div><div class="panel batch-panel"><details><summary><b>Cadastrar rastreadores em lote</b> <span class="muted">— clique para expandir</span></summary><p class="muted">Cole um IMEI de 15 dígitos por linha. Modelo, origem, status e local serão aplicados a todos. Nenhum registro será salvo se houver identificadores inválidos ou duplicados.</p><form id="equipmentBatchForm" class="batch-form"><label class="batch-identifiers">IMEIs (um por linha)<textarea name="imeis" required rows="6" placeholder="Cole os IMEIs aqui, um por linha"></textarea></label><label>Modelo<input name="modelo" required placeholder="J16"></label><label>Origem<select name="origem"><option>Novo</option><option>Reutilizado</option></select></label><label>Status técnico<select name="status"><option>INTERNO</option><option>INTERNO/BLOQUEIO</option><option>INTERNO/BANCADA</option><option>PRONTO</option><option>DEFEITO</option><option>AGUARDANDO VERIFICAÇÃO</option></select></label><label>Localização<select name="local"><option>Unidade Central</option><option>Unidade Norte</option><option>Unidade Sul</option><option>Unidade Leste</option><option>Unidade Oeste</option><option>Unidade Regional</option><option>Com técnico</option><option>Indisponível</option></select></label><label>Colaborador<input name="autor" required placeholder="Nome do colaborador"></label><button type="submit">Validar e cadastrar lote</button></form></details></div><div class="panel"><div class="toolbar"><h2>Rastreadores</h2><input id="eqSearch" placeholder="Buscar IMEI ou modelo"></div><div class="tablewrap"><table><thead><tr><th>IMEI</th><th>Modelo / origem</th><th>Status técnico</th><th>Local</th><th>CHIP vinculado</th><th>Alterar status</th></tr></thead><tbody id="eqRows"></tbody></table></div></div></section>
+<section id="chips" class="hide"><div class="panel"><h2>Cadastrar CHIP</h2><form id="chipForm"><label>ICCID (19–22 dígitos)<input name="iccid" required pattern="[0-9]{19,22}" maxlength="22"></label><label>Número da linha<input name="linha" required placeholder="DDD + número"></label><label>Operadora<select name="operadora"><option>Vivo</option><option>Claro</option><option>Outra</option></select></label><label>Colaborador<input name="autor" required></label><button>Cadastrar</button></form></div><div class="panel batch-panel"><details><summary><b>Cadastrar CHIPs em lote</b> <span class="muted">— clique para expandir</span></summary><p class="muted">Cole um ICCID por linha. Opcionalmente, informe o número da linha após ponto e vírgula: <code>ICCID;DDD+número</code>. Quando não informado, o número ficará como “Não informado”. Nenhum CHIP será associado automaticamente a um rastreador.</p><form id="chipBatchForm" class="batch-form"><label class="batch-identifiers">ICCID; número da linha (opcional)<textarea name="itens" required rows="6" placeholder="Cole um ICCID por linha ou ICCID;DDD+número"></textarea></label><label>Operadora<select name="operadora"><option>Vivo</option><option>Claro</option><option>Outra</option></select></label><label>Colaborador<input name="autor" required placeholder="Nome do colaborador"></label><button type="submit">Validar e cadastrar lote</button></form></details></div><div class="panel"><h2>Associar / corrigir CHIP</h2><form id="linkForm"><label>ICCID<select id="linkIccid" name="iccid" required></select></label><label>IMEI de destino<select id="linkImei" name="imei" required></select></label><label>Colaborador<input name="autor" required></label><button>Registrar novo vínculo</button></form><p class="muted">A correção exige justificativa e é auditada. <b>Atenção: nesta versão não existe controle de permissões.</b> A associação no SmartStock não altera a plataforma externa.</p></div><div class="panel"><h2>CHIPs cadastrados</h2><div class="tablewrap"><table><thead><tr><th>ICCID</th><th>Linha</th><th>Operadora</th><th>Vínculo atual</th><th>Situação</th><th>Ação</th></tr></thead><tbody id="chipRows"></tbody></table></div></div></section>
+<section id="tags" class="hide"><div class="panel"><h2>TAGs — cadastro independente</h2><p class="muted">TAGs não exigem CHIP ou ICCID. O identificador é padronizado para 15 dígitos, acrescentando zeros à esquerda, como na Rede Veículos. O número original também é preservado. Cadastro local não confirma ativação na plataforma.</p><form id="tagForm"><label>Identificadores das TAGs (um por linha)<textarea name="ids" required placeholder="Digite ou cole os identificadores, um por linha"></textarea></label><label>Unidade<select name="local"><option>Unidade Central</option><option>Unidade Norte</option><option>Unidade Sul</option><option>Unidade Leste</option><option>Unidade Oeste</option><option>Unidade Regional</option></select></label><label>Situação técnica<select name="status"><option>AGUARDANDO VERIFICAÇÃO</option><option>INTERNO</option><option>PRONTO</option><option>DEFEITO</option></select></label><label>Responsável<input name="autor" required placeholder="Nome do colaborador"></label><label>Observação<input name="obs" placeholder="Ex.: Demonstração para gestão"></label><button>Cadastrar TAGs</button></form></div><div class="panel"><h2>Estoque de TAGs</h2><div class="tablewrap"><table><thead><tr><th>Identificador (15 dígitos)</th><th>Material</th><th>Local</th><th>Situação técnica</th><th>Ativação externa</th><th>Ação</th></tr></thead><tbody id="tagRows"></tbody></table></div></div></section><section id="movimentos" class="hide"><div class="panel"><h2>Movimentação de rastreador</h2><form id="moveForm"><label>IMEI<select name="imei" id="moveImei" required></select></label><label>Tipo<select name="tipo" id="moveTipo"><option value="TRANSFERENCIA">Transferência entre unidades</option><option value="ENTREGA">Entrega ao técnico</option><option value="DEVOLUCAO_SEM_FALHA">Devolução sem falha técnica</option><option value="DEVOLUCAO_FALHA">Devolução com falha técnica</option></select></label><label>Destino / unidade<select name="destino"><option>Unidade Central</option><option>Unidade Norte</option><option>Unidade Sul</option><option>Unidade Leste</option><option>Unidade Oeste</option><option>Unidade Regional</option><option>Com técnico</option></select></label><label>Responsável<input name="autor" required></label><label class="wide">Observação<textarea name="obs" placeholder="Motivo, técnico, referência do atendimento..."></textarea></label><button>Registrar movimentação</button></form><p class="muted">Transferência não equivale a instalação. Devolução com falha encaminha o equipamento à bancada (status INTERNO).</p></div><div class="panel"><h2>Últimas movimentações</h2><div class="tablewrap"><table><thead><tr><th>Data</th><th>IMEI</th><th>Tipo</th><th>Origem</th><th>Destino</th><th>Responsável</th></tr></thead><tbody id="moveRows"></tbody></table></div></div></section>
+<section id="protocolos" class="hide"><div class="panel"><h2>Protocolo de entrega ao técnico</h2><p class="muted">Registre um protocolo com rastreadores (IMEIs separados por vírgula) e insumos em texto. O fechamento registra devoluções e confirmação da assinatura.</p><form id="protocolForm"><label>Técnico<input name="tecnico" required></label><label>Origem<select name="origem"><option>Unidade Central</option><option>Unidade Norte</option><option>Unidade Sul</option><option>Unidade Leste</option><option>Unidade Oeste</option><option>Unidade Regional</option></select></label><label>IMEIs entregues (separar por vírgula)<textarea name="imeis" placeholder="15 dígitos, 15 dígitos"></textarea></label><label>Outros materiais / quantidades<textarea name="insumos" placeholder="2 cabos, 1 fita..."></textarea></label><label>Responsável pela entrega<input name="autor" required></label><button>Abrir protocolo</button></form></div><div class="panel"><h2>Protocolos</h2><div id="protocolRows"></div></div></section>
+<section id="historico" class="hide"><div class="panel"><div class="toolbar"><h2>Auditoria de alterações</h2><input id="logSearch" placeholder="Filtrar IMEI, ICCID ou ação"></div><div class="tablewrap"><table><thead><tr><th>Data e hora</th><th>Evento</th><th>Identificador</th><th>Local</th><th>Responsável</th><th>Detalhes</th></tr></thead><tbody id="logRows"></tbody></table></div></div><div class="panel"><h2>Histórico de entradas e exclusões</h2><p class="muted">Selecione os itens diretamente nas tabelas abaixo para preparar a exclusão. Os registros de recebimento permanecem visíveis após correções, com seus saldos atuais.</p><div id="entryHistory"></div><h3>Exclusões registradas</h3><div id="deletionHistory"></div></div><div class="panel"><h2>Backup e limpeza</h2><button class="secondary" id="exportBtn">Exportar JSON</button> <button class="danger" id="resetBtn">Remover registros fictícios</button><div style="margin-top:20px;border-top:1px solid #dce9e5;padding-top:18px"><h3>Excluir materiais cadastrados</h3><p class="muted">Exclusão individual ou em lote. Selecione os itens, informe o responsável e o motivo. A exclusão não modifica a plataforma externa e não apaga o histórico de auditoria. Faça backup antes de excluir.</p><div class="toolbar"><label>Tipo de material<select id="deleteType"><option value="equipment">Rastreadores (IMEI)</option><option value="chips">CHIPs (ICCID)</option><option value="supplies">Insumos (quantidade)</option></select></label><label>Buscar<input id="deleteSearch" placeholder="Buscar identificador, material ou unidade"></label></div><div class="toolbar" style="margin:12px 0"><button class="secondary" id="selectAllDelete">Selecionar todos os exibidos</button><button class="secondary" id="clearDelete">Limpar seleção</button><span class="muted" id="deleteSelected">0 selecionados</span></div><div class="tablewrap"><table><thead id="deleteHead"></thead><tbody id="deleteRows"></tbody></table></div><div class="panel" style="margin-top:14px;background:#f8fbfa"><label>Responsável pela exclusão<input id="deleteActor" autocomplete="off" placeholder="Nome completo" maxlength="120"></label><label style="margin-top:12px">Motivo obrigatório<textarea id="deleteReason" rows="2" placeholder="Descreva por que os materiais precisam ser excluídos" maxlength="1000"></textarea></label><button class="danger" id="deleteSelectedBtn" style="margin-top:12px">Excluir itens selecionados</button><p class="muted">Para insumos, informe a quantidade a excluir em cada linha. Registros envolvidos em movimentações ou protocolos não podem ser excluídos neste protótipo. Não há autenticação nem permissão efetiva nesta versão.</p></div></div><p class="muted">Exportação local para backup. Não substitui backup centralizado. A limpeza preserva recebimentos reais já importados.</p></div></section>
+<footer>SmartStock — Protótipo funcional v0.17 • Identidade demonstrativa, sem uso da logomarca oficial</footer><section id="usuarios" class="hide"><div class="panel access-hero"><div><span class="access-eyebrow">SMARTSTOCK • CONTROLE DE ACESSO</span><h2>Usuários e permissões</h2><p>Estrutura prevista para operação online nas seis unidades. As contas abaixo são <b>perfis planejados</b>, não usuários autenticados ou cadastrados.</p></div><span class="access-status">Prévia de interface • sem login ativo</span></div><div class="access-stats"><div class="access-stat"><span>Contas planejadas</span><strong>11</strong></div><div class="access-stat"><span>Administrador ROOT</span><strong>1</strong></div><div class="access-stat"><span>Gestão e liderança</span><strong>4</strong></div><div class="access-stat"><span>Unidades</span><strong>6</strong></div></div><div class="panel"><div class="access-toolbar"><div><h2>Estrutura de contas</h2><p class="muted">IDs provisórios de planejamento. A identidade definitiva será criada pelo serviço de autenticação.</p></div><button type="button" class="access-disabled" disabled title="Disponível após autenticação no servidor">+ Criar usuário (em breve)</button></div><div class="tablewrap"><table class="access-table"><thead><tr><th>ID planejado</th><th>Usuário / função</th><th>Perfil</th><th>Unidade</th><th>Situação</th></tr></thead><tbody><tr><td>ROOT-001</td><td><b>Administrador demonstrativo</b><small>Perfil ilustrativo</small></td><td><span class="access-pill root">ROOT</span></td><td>Todas</td><td>Não provisionado</td></tr><tr><td>DIR-001 a 003</td><td><b>3 contas da Diretoria</b><small>Nomes a definir</small></td><td><span class="access-pill">Diretoria</span></td><td>Todas</td><td>Não provisionadas</td></tr><tr><td>LID-001</td><td><b>Liderança demonstrativa</b><small>Liderança do setor</small></td><td><span class="access-pill">Gestão</span></td><td>Todas</td><td>Não provisionada</td></tr><tr><td>UNI-001 a 006</td><td><b>6 acessos operacionais</b><small>Unidade Central, Unidade Norte, Unidade Sul, Unidade Leste, Unidade Oeste e Unidade Regional</small></td><td><span class="access-pill unit">Unidade</span></td><td>Uma por conta</td><td>Não provisionadas</td></tr></tbody></table></div></div><div class="panel"><h2>Matriz de permissões planejada</h2><p class="muted">A futura aplicação deverá validar cada permissão no servidor e no banco de dados, não apenas ocultar botões.</p><div class="tablewrap"><table class="access-table"><thead><tr><th>Ação</th><th>ROOT</th><th>Diretoria / Dayanne</th><th>Unidade</th></tr></thead><tbody><tr><td>Consultar painel e estoque</td><td>✓</td><td>✓</td><td>Somente sua unidade</td></tr><tr><td>Criar e atualizar protocolos</td><td>✓</td><td>✓</td><td>✓</td></tr><tr><td>Vincular técnico e cliente</td><td>✓</td><td>✓</td><td>✓</td></tr><tr><td>Cadastrar TAGs, rastreadores e CHIPs</td><td>✓</td><td>✓</td><td>—</td></tr><tr><td>Movimentar e alterar estoque</td><td>✓</td><td>✓</td><td>—</td></tr><tr><td>Excluir materiais</td><td>✓</td><td>Somente se autorizado</td><td>—</td></tr><tr><td>Consultar auditoria</td><td>Completa</td><td>Completa</td><td>Da unidade</td></tr><tr><td>Criar usuários e conceder permissões</td><td>✓</td><td>—</td><td>—</td></tr><tr><td>Administrar conta ROOT</td><td>✓</td><td>—</td><td>—</td></tr></tbody></table></div></div><div class="panel access-warning"><h2>Autenticação ainda não ativada</h2><p>Este arquivo continua usando <code>localStorage</code>. Não há senhas, sessões, bloqueios ou restrições reais nesta versão. A área acima é um <b>layout de planejamento</b>; não utilize este HTML como sistema multiusuário na internet.</p><p class="muted">Próximas etapas: criar backend, configurar autenticação, políticas de acesso por unidade, provisionar ROOT com segurança e migrar o estoque após backup e validação.</p></div></section></main><div id="toast" class="toast"></div><script>
+const KEY='smartstock_portfolio_full_v024';const seed=()=>({equipment:[],chips:[],moves:[],protocols:[],logs:[],supplies:[],receipts:[]});let db;try{db=JSON.parse(localStorage.getItem(KEY))||seed()}catch{db=seed()}const fakeImeis=new Set(['123456789012345','123456789012346','123456789012347']);const fakeIccids=new Set(['8955000000000000001','8955000000000000002','8955000000000000003']);function removeDemo(){db.equipment=(db.equipment||[]).filter(x=>!fakeImeis.has(x.imei));db.chips=(db.chips||[]).filter(x=>!fakeIccids.has(x.iccid));db.moves=(db.moves||[]).filter(x=>!fakeImeis.has(x.imei));db.logs=(db.logs||[]).filter(x=>!fakeImeis.has(x.id)&&!fakeIccids.has(x.id));db.protocols=(db.protocols||[]).filter(x=>!(x.imeis||[]).some(i=>fakeImeis.has(i)));}removeDemo();localStorage.setItem(KEY,JSON.stringify(db));const save=()=>{localStorage.setItem(KEY,JSON.stringify(db));render()};db.supplies ||= [];db.receipts ||= [];db.deletedRecords ||= [];db.tags ||= [];const $=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const now=()=>new Date().toLocaleString('pt-BR');const log=(event,id,autor,detail)=>db.logs.unshift({date:now(),event,id,autor,detail});function toast(msg){$('toast').textContent=msg;$('toast').style.display='block';clearTimeout(window._toast);window._toast=setTimeout(()=>$('toast').style.display='none',4200)}const badge=s=>`<span class="pill ${s==='PRONTO'||s==='Disponível'||s==='Fechado'?'ok':s==='DEFEITO'?'bad':s?.includes('INTERNO')||s==='Aberto'?'warn':''}">${esc(s)}</span>`;const getEq=i=>db.equipment.find(e=>e.imei===i);const getChip=i=>db.chips.find(c=>c.iccid===i);const opts=(arr,fn)=>arr.map(v=>`<option value="${esc(fn(v))}">${esc(fn(v))}</option>`).join('');function render(){let ready=db.equipment.filter(e=>e.status==='PRONTO'&&!['Com técnico','Indisponível'].includes(e.local)).length;let vals=[['Rastreadores',db.equipment.length],['TAGs',db.tags.length],['Prontos no estoque',ready],['Em testes',db.equipment.filter(e=>e.status.startsWith('INTERNO')).length],['Defeituosos',db.equipment.filter(e=>e.status==='DEFEITO').length],['CHIPs disponíveis',db.chips.filter(c=>!c.imei).length],['Protocolos abertos',db.protocols.filter(p=>!p.closed).length]];vals.push(['Cabos em estoque',db.supplies.filter(x=>x.material==='Cabo').reduce((sum,x)=>sum+Number(x.quantidade),0)]);$('metrics').innerHTML=vals.map(([n,v])=>`<div class="card"><span class="muted">${n}</span><strong>${v}</strong></div>`).join('');const stockTotals=new Map();const addStock=(unit,material,qty)=>{const key=JSON.stringify([unit,material]);stockTotals.set(key,(stockTotals.get(key)||0)+Number(qty||0))};db.equipment.forEach(e=>addStock(e.local||'Não informada','Rastreador '+(e.modelo||'Não informado'),1));db.tags.forEach(t=>addStock(t.local||'Não informada','TAG',1));db.chips.forEach(c=>{const linked=c.imei?getEq(c.imei):null;addStock(c.local||linked?.local||'Não informada','CHIP',1)});db.supplies.forEach(x=>addStock(x.unidade||'Não informada',x.material,Number(x.quantidade)));const stockRows=[...stockTotals.entries()].map(([k,q])=>{const [unit,material]=JSON.parse(k);return {unit,material,q}}).sort((a,b)=>a.unit.localeCompare(b.unit,'pt-BR')||a.material.localeCompare(b.material,'pt-BR'));$('tagRows').innerHTML=db.tags.map(t=>`<tr><td>${esc(t.id)}</td><td>TAG</td><td>${esc(t.local)}</td><td>${badge(t.status)}</td><td>${esc(t.ativacao||'NÃO CONFIRMADA')}</td><td><select id="tagstatus_${esc(t.id)}">${['AGUARDANDO VERIFICAÇÃO','INTERNO','PRONTO','DEFEITO'].map(v=>`<option ${v===t.status?'selected':''}>${v}</option>`).join('')}</select> <button onclick="changeTagStatus('${esc(t.id)}')">Salvar</button></td></tr>`).join('')||'<tr><td colspan="6">Nenhuma TAG cadastrada.</td></tr>';
+$('supplyRows').innerHTML=stockRows.map(x=>`<tr><td>${esc(x.unit)}</td><td>${esc(x.material)}</td><td>${esc(x.q)}</td></tr>`).join('')+(stockRows.length?`<tr><td colspan="2"><b>Total de unidades físicas cadastradas</b></td><td><b>${stockRows.reduce((n,x)=>n+x.q,0)}</b></td></tr>`:'<tr><td colspan="3">Nenhum material registrado</td></tr>');$('receiptRows').innerHTML=db.receipts.map(x=>`<p><b>${esc(x.id)}</b> — ${esc(x.unidade)} • ${x.equipmentCount} rastreadores, ${x.chipCount} chips, ${x.cableCount} cabos${x.tagCount?' • '+x.tagCount+' TAGs':''} • ${esc(x.importedAt)}</p>`).join('')||'<p class=muted>Nenhum recebimento importado</p>';$('breakdown').innerHTML='<p class="muted">Por unidade: '+[...new Set(db.equipment.map(e=>e.local))].map(l=>`${esc(l)}: ${db.equipment.filter(e=>e.local===l).length}`).join(' • ')+'</p>';let q=$('eqSearch').value.toLowerCase();$('eqRows').innerHTML=db.equipment.filter(e=>e.imei.includes(q)||e.modelo.toLowerCase().includes(q)).map(e=>`<tr><td>${esc(e.imei)}</td><td>${esc(e.modelo)}<br><small>${esc(e.origem)}</small></td><td>${badge(e.status)}</td><td>${esc(e.local)}</td><td>${esc(e.chip||'—')}${e.chipPlanejado?'<br><small>Planejado — não confirmado na plataforma</small>':''}</td><td><div class="rowactions"><select id="status_${e.imei}">${['AGUARDANDO VERIFICAÇÃO','INTERNO','INTERNO/BLOQUEIO','INTERNO/BANCADA','PRONTO','DEFEITO'].map(s=>`<option ${s===e.status?'selected':''}>${s}</option>`).join('')}</select><button onclick="changeStatus('${e.imei}')">Salvar</button></div></td></tr>`).join('')||'<tr><td colspan="6">Nenhum rastreador.</td></tr>';$('chipRows').innerHTML=db.chips.map(c=>`<tr><td>${esc(c.iccid)}</td><td>${esc(c.linha)}</td><td>${esc(c.operadora)}</td><td>${esc(c.imei||'—')}</td><td>${badge(c.imei?(c.vinculoPlanejado?'Associação planejada':'Vinculado'):'Disponível')}</td><td>${c.imei?`<button class="secondary" onclick="unlinkChip('${c.iccid}')">Desvincular</button>`:'—'}</td></tr>`).join('');$('linkIccid').innerHTML=opts(db.chips,c=>c.iccid);$('linkImei').innerHTML=opts(db.equipment.filter(e=>e.status!=='DEFEITO'),e=>e.imei);$('moveImei').innerHTML=opts(db.equipment,e=>e.imei);$('moveRows').innerHTML=db.moves.slice(0,25).map(m=>`<tr><td>${esc(m.date)}</td><td>${esc(m.imei)}</td><td>${esc(m.tipo)}</td><td>${esc(m.from)}</td><td>${esc(m.to)}</td><td>${esc(m.autor)}</td></tr>`).join('')||'<tr><td colspan="6">Nenhuma movimentação.</td></tr>';$('protocolRows').innerHTML=db.protocols.map(p=>`<div class="panel"><div class="toolbar"><b>Protocolo #${p.id} — ${esc(p.tecnico)}</b>${badge(p.closed?'Fechado':'Aberto')}</div><p class="muted">${esc(p.date)} • ${esc(p.origem)} • Responsável: ${esc(p.autor)}</p><p><b>IMEIs:</b> ${esc(p.imeis.join(', ')||'Nenhum')}<br><b>Insumos:</b> ${esc(p.insumos||'Nenhum')}</p>${p.closed?`<p>Devolvidos: ${esc(p.returns.join(', ')||'Nenhum')} • Assinatura confirmada: ${p.signed?'Sim':'Não'} • Fechado por ${esc(p.closer)}</p>`:`<button onclick="closeProtocol(${p.id})">Conferir e fechar</button>`}</div>`).join('')||'<p class="muted">Nenhum protocolo registrado.</p>';let lq=$('logSearch').value.toLowerCase();renderDeletion();$('logRows').innerHTML=db.logs.filter(l=>JSON.stringify(l).toLowerCase().includes(lq)).map(l=>`<tr><td>${esc(l.date)}</td><td>${esc(l.event)}</td><td>${esc(l.id)}</td><td>${esc(l.autor)}</td><td>${esc(l.detail)}</td></tr>`).join('')||'<tr><td colspan="5">Nenhum evento.</td></tr>'}function fields(form){return Object.fromEntries(new FormData(form).entries())}function actor(){let a=prompt('Nome do colaborador responsável pela alteração:');return a?.trim()||null}window.changeStatus=imei=>{let e=getEq(imei),s=$('status_'+imei).value;if(s===e.status)return;let a=actor();if(!a)return;if(s==='DEFEITO'&&e.chip){toast('Desvincule o CHIP antes de confirmar o defeito definitivo.');return}let old=e.status;e.status=s;if(s==='DEFEITO')e.local='Indisponível';log('STATUS',imei,a,`${old} → ${s}`);save();toast('Status atualizado')};window.unlinkChip=iccid=>{let c=getChip(iccid);if(!c?.imei)return;let a=actor();if(!a)return;let old=c.imei,e=getEq(old);if(e){e.chip=null;e.chipPlanejado=false}c.imei=null;c.vinculoPlanejado=false;log('CHIP DESVINCULADO',iccid,a,`IMEI anterior ${old}; confirmar atualização na plataforma`);save();toast('CHIP desvinculado no protótipo. Atualize a plataforma separadamente.')};$('equipmentForm').onsubmit=e=>{e.preventDefault();let f=fields(e.target);if(getEq(f.imei)){toast('IMEI já cadastrado');return}if(f.status==='DEFEITO')f.local='Indisponível';db.equipment.push({...f,chip:null});log('CADASTRO IMEI',f.imei,f.autor,`${f.modelo} / ${f.origem} / ${f.status}`);e.target.reset();save();toast('Rastreador cadastrado')};$('chipForm').onsubmit=e=>{e.preventDefault();let f=fields(e.target);if(getChip(f.iccid)){toast('ICCID já cadastrado');return}db.chips.push({...f,imei:null});log('CADASTRO CHIP',f.iccid,f.autor,'CHIP disponível');e.target.reset();save();toast('CHIP cadastrado')};// Cadastro em lote: validação integral antes de modificar o estoque.
+const batchLines=text=>String(text||'').split(/\r?\n/).map(v=>v.trim()).filter(Boolean);
+$('equipmentBatchForm').onsubmit=e=>{e.preventDefault();const f=fields(e.target),items=batchLines(f.imeis);if(!items.length){toast('Informe pelo menos um IMEI');return}const invalid=items.filter(i=>!/^\d{15}$/.test(i));if(invalid.length){toast('IMEI inválido (exige 15 dígitos): '+invalid[0]);return}if(new Set(items).size!==items.length){toast('Há IMEIs repetidos no lote. Nenhum cadastro realizado.');return}const existing=items.find(i=>getEq(i)||(db.tags||[]).some(t=>t.imei===i||t.id===i));if(existing){toast('IMEI já cadastrado: '+existing+'. Nenhum cadastro realizado.');return}if(!f.modelo.trim()||!f.autor.trim()){toast('Informe modelo e colaborador');return}if(!confirm('Cadastrar '+items.length+' rastreador(es) do modelo '+f.modelo+'?'))return;const local=f.status==='DEFEITO'?'Indisponível':f.local;for(const imei of items){db.equipment.push({imei,modelo:f.modelo,origem:f.origem,status:f.status,local,autor:f.autor,chip:null});log('CADASTRO IMEI',imei,f.autor,`${f.modelo} / ${f.origem} / ${f.status}; cadastro em lote (${items.length})`)}e.target.reset();save();toast(items.length+' rastreador(es) cadastrado(s) com sucesso')};
+$('chipBatchForm').onsubmit=e=>{e.preventDefault();const f=fields(e.target),lines=batchLines(f.itens);if(!lines.length){toast('Informe pelo menos um ICCID');return}const entries=[];for(const line of lines){const parts=line.split(';').map(v=>v.trim());if(parts.length>2||!/^\d{19,22}$/.test(parts[0])){toast('Linha inválida: '+line+'. Use ICCID ou ICCID;número.');return}if(parts[1]&&!/^[\d\s()+-]{8,25}$/.test(parts[1])){toast('Número da linha inválido para ICCID '+parts[0]);return}entries.push({iccid:parts[0],linha:parts[1]||'Não informado'})}const ids=entries.map(x=>x.iccid);if(new Set(ids).size!==ids.length){toast('Há ICCIDs repetidos no lote. Nenhum cadastro realizado.');return}const existing=ids.find(i=>getChip(i));if(existing){toast('ICCID já cadastrado: '+existing+'. Nenhum cadastro realizado.');return}if(!f.autor.trim()){toast('Informe o colaborador');return}if(!confirm('Cadastrar '+entries.length+' CHIP(s) da operadora '+f.operadora+'?'))return;for(const c of entries){db.chips.push({...c,operadora:f.operadora,autor:f.autor,imei:null});log('CADASTRO CHIP',c.iccid,f.autor,'CHIP disponível; cadastro em lote ('+entries.length+'); linha: '+c.linha)}e.target.reset();save();toast(entries.length+' CHIP(s) cadastrado(s) com sucesso')};
+$('linkForm').onsubmit=e=>{e.preventDefault();let f=fields(e.target),c=getChip(f.iccid),target=getEq(f.imei);if(!c||!target||target.status==='DEFEITO'){toast('CHIP ou destino inválido');return}if(target.chip&&target.chip!==c.iccid){toast('IMEI de destino já possui CHIP; desvincule-o primeiro');return}let old=c.imei;if(old===f.imei){toast('CHIP já associado a esse IMEI');return}let motivo='Associação inicial';if(old){motivo=prompt('CORREÇÃO DE VÍNCULO: informe o motivo obrigatório. ATENÇÃO: ainda não há autenticação/permissões nesta versão.');if(!motivo?.trim())return}if(old){let previous=getEq(old);if(previous){previous.chip=null;previous.chipPlanejado=false}}c.imei=f.imei;c.vinculoPlanejado=true;target.chip=c.iccid;target.chipPlanejado=true;log(old?'CORREÇÃO DE ASSOCIAÇÃO':'ASSOCIAÇÃO PLANEJADA',c.iccid,f.autor,`${old||'Sem vínculo'} → ${f.imei}; motivo: ${motivo}; confirmar na plataforma`);save();toast('Associação planejada registrada; confirme o vínculo na plataforma')};$('moveForm').onsubmit=e=>{e.preventDefault();let f=fields(e.target),eq=getEq(f.imei);if(!eq)return;let from=eq.local,to=f.destino;if(f.tipo==='ENTREGA'){if(eq.status!=='PRONTO'||eq.local==='Com técnico'||eq.local==='Indisponível'){toast('Só é possível entregar rastreadores prontos em estoque');return}to='Com técnico'}else if(f.tipo==='TRANSFERENCIA'){if(eq.local==='Com técnico'||eq.local==='Indisponível'){toast('Equipamento não está em unidade de estoque');return}if(from===to){toast('Origem e destino iguais');return}}else{if(from!=='Com técnico'){toast('Devolução exige equipamento com técnico');return}if(to==='Com técnico'){toast('Selecione unidade de retorno');return}if(f.tipo==='DEVOLUCAO_FALHA'){eq.status='INTERNO';log('RETORNO À BANCADA',eq.imei,f.autor,'Falha técnica relatada; reiniciar testes')}}eq.local=to;db.moves.unshift({date:now(),imei:eq.imei,tipo:f.tipo,from,to,autor:f.autor,obs:f.obs});log('MOVIMENTAÇÃO',eq.imei,f.autor,`${f.tipo}: ${from} → ${to}; ${f.obs||''}`);e.target.reset();save();toast('Movimentação registrada')};$('protocolForm').onsubmit=e=>{e.preventDefault();let f=fields(e.target),imeis=f.imeis.split(',').map(s=>s.trim()).filter(Boolean);if(new Set(imeis).size!==imeis.length){toast('IMEIs duplicados no protocolo');return}for(let i of imeis){let eq=getEq(i);if(!eq||eq.status!=='PRONTO'||eq.local!==f.origem){toast(`IMEI ${i}: inexistente, não pronto ou fora da origem`);return}}let id=(db.protocols.reduce((m,p)=>Math.max(m,p.id),0)+1);for(let i of imeis){getEq(i).local='Com técnico';db.moves.unshift({date:now(),imei:i,tipo:'ENTREGA_PROTOCOLO',from:f.origem,to:'Com técnico',autor:f.autor})}db.protocols.unshift({id,date:now(),tecnico:f.tecnico,origem:f.origem,imeis,insumos:f.insumos,autor:f.autor,closed:false,returns:[],signed:false});log('PROTOCOLO ABERTO',String(id),f.autor,`Técnico ${f.tecnico}; IMEIs ${imeis.join(', ')||'nenhum'}; insumos ${f.insumos}`);e.target.reset();save();toast('Protocolo aberto')};window.closeProtocol=id=>{let p=db.protocols.find(p=>p.id===id);if(!p||p.closed)return;let raw=prompt(`IMEIs devolvidos do protocolo #${id}, separados por vírgula (deixe vazio se nenhum):`);if(raw===null)return;let returned=raw.split(',').map(s=>s.trim()).filter(Boolean);if(new Set(returned).size!==returned.length||returned.some(i=>!p.imeis.includes(i))){toast('A lista contém IMEI repetido ou fora do protocolo');return}let signed=confirm('O técnico assinou o protocolo após a conferência?\nOK = sim; Cancelar = não.');let a=actor();if(!a)return;for(let i of returned){let eq=getEq(i);if(eq){eq.local=p.origem;db.moves.unshift({date:now(),imei:i,tipo:'DEVOLUCAO_SEM_FALHA',from:'Com técnico',to:p.origem,autor:a});log('DEVOLUÇÃO PROTOCOLO',i,a,`Protocolo #${id}; sem falha técnica`)}}p.closed=true;p.returns=returned;p.signed=signed;p.closer=a;p.closedAt=now();log('PROTOCOLO FECHADO',String(id),a,`Devolvidos ${returned.join(', ')||'nenhum'}; assinatura ${signed?'sim':'não'}; não devolvidos aguardam confirmação de instalação`);save();toast('Protocolo fechado; IMEIs não devolvidos continuam com técnico até confirmação posterior')};$('nav').onclick=e=>{let b=e.target.closest('button[data-tab]');if(!b)return;document.querySelectorAll('main>section').forEach(s=>s.classList.toggle('hide',s.id!==b.dataset.tab));document.querySelectorAll('#nav button').forEach(x=>x.classList.toggle('active',x===b))};$('eqSearch').oninput=render;$('logSearch').oninput=render;$('exportBtn').onclick=()=>{let blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='smartstock-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};$('resetBtn').onclick=()=>{if(confirm('Remover apenas os registros fictícios conhecidos? Os dados reais importados serão preservados.')){removeDemo();save();toast('Registros fictícios removidos; dados reais preservados')}};
+
+
+// TAGs: categoria independente; identificador padronizado para 15 dígitos, sem ICCID.
+const normalizeTagId = raw => { const original=String(raw).trim(); if(!/^\d{1,15}$/.test(original))return null; return {original,id:original.padStart(15,"0")}; };
+$('tagForm').onsubmit=e=>{e.preventDefault();const f=fields(e.target);const rawIds=f.ids.split(/[\s,;]+/).map(x=>x.trim()).filter(Boolean),normalized=rawIds.map(normalizeTagId);if(!rawIds.length||normalized.some(x=>!x)){toast('Informe identificadores numéricos de até 15 dígitos.');return}const ids=normalized.map(x=>x.id);if(new Set(ids).size!==ids.length||ids.some(id=>db.tags.some(t=>String(t.id).padStart(15,'0')===id)||db.equipment.some(t=>t.imei===id))){toast('Há identificadores duplicados ou já cadastrados.');return}for(const id of ids){const original=normalized.find(x=>x.id===id).original;db.tags.push({id,identificadorOriginal:original,modelo:'TAG',local:f.local,status:f.status,ativacao:'NÃO CONFIRMADA',obs:f.obs,createdAt:now()});log('ENTRADA TAG',id,f.autor,`TAG / ${f.local} / ${f.status}; original ${original}; ${f.obs||'Sem observação'}; sem CHIP`)}db.receipts.unshift({id:'TAG-'+Date.now(),unidade:f.local,equipmentCount:0,chipCount:0,cableCount:0,tagCount:ids.length,tagIds:[...ids],importedAt:now(),autor:f.autor});e.target.reset();save();toast(ids.length+' TAG(s) cadastrada(s) sem CHIP.')};
+window.changeTagStatus=id=>{const t=db.tags.find(x=>x.id===id);if(!t)return;const next=$('tagstatus_'+id).value;if(next===t.status)return;const a=actor();if(!a)return;const old=t.status;t.status=next;log('STATUS TAG',id,a,`${old} → ${next}; ativação externa não confirmada`);save();toast('Situação da TAG atualizada.')};
+// Exclusões auditadas: não remover histórico e não afetar a plataforma de rastreamento.
+const deleteSelection=new Set();
+const delKey=(kind,id)=>kind+':'+id;
+function deleteCandidates(){const kind=$('deleteType').value,term=$('deleteSearch').value.trim().toLowerCase();let list=[];
+ if(kind==='equipment')list=db.equipment.map(x=>({kind,id:String(x.imei),label:x.imei,material:x.modelo||'Não informado',local:x.local||'Não informado',status:x.status||'Não informado',extra:`${x.modelo} • ${x.local} • ${x.status}`}));
+ if(kind==='chips')list=db.chips.map(x=>({kind,id:String(x.iccid),label:x.iccid,material:'CHIP',local:x.local||getEq(x.imei)?.local||'Não informado',status:x.imei?(x.vinculoPlanejado?'ASSOCIAÇÃO PLANEJADA':'VINCULADO'):'DISPONÍVEL',extra:`${x.imei?'Associado ao IMEI '+x.imei:'Sem vínculo'}`}));
+ if(kind==='tags')list=db.tags.map(x=>({kind,id:String(x.id),label:x.id,material:'TAG',local:x.local,status:x.status,extra:`TAG • ${x.local} • ${x.status}`}));
+ if(kind==='supplies')list=db.supplies.map((x,i)=>({kind,id:String(i),label:x.material,material:x.material,local:x.unidade||'Não informado',status:'EM ESTOQUE',extra:`Saldo: ${x.quantidade}`,max:Number(x.quantidade)}));
+ return list.filter(x=>(x.label+' '+x.extra).toLowerCase().includes(term));
+}
+function renderDeletion(){if(!$('deleteRows'))return;const list=deleteCandidates();$('deleteHead').innerHTML='<tr><th>Selecionar</th><th>Material</th><th>Identificador</th><th>Local</th><th>Situação atual</th><th>Quantidade a excluir</th></tr>';
+ $('deleteRows').innerHTML=list.map(x=>`<tr><td><input type="checkbox" class="del-check" data-kind="${x.kind}" data-id="${esc(x.id)}" ${deleteSelection.has(delKey(x.kind,x.id))?'checked':''}></td><td>${esc(x.material)}</td><td>${esc(x.kind==='supplies'?'—':x.label)}</td><td>${esc(x.local)}</td><td>${esc(x.status)}</td><td>${x.kind==='supplies'?`<input type="number" class="del-qty" data-id="${esc(x.id)}" min="1" max="${x.max}" value="${x.max}" style="width:100px">`:'1 unidade'}</td></tr>`).join('')||'<tr><td colspan="6">Nenhum material encontrado.</td></tr>';
+ $('deleteSelected').textContent=deleteSelection.size+' selecionado(s)';
+}
+$('deleteType').addEventListener('change',()=>{deleteSelection.clear();renderDeletion()});
+$('deleteSearch').addEventListener('input',renderDeletion);
+$('deleteRows').addEventListener('change',e=>{const x=e.target.closest('.del-check');if(!x)return;const key=delKey(x.dataset.kind,x.dataset.id);if(x.checked)deleteSelection.add(key);else deleteSelection.delete(key);$('deleteSelected').textContent=deleteSelection.size+' selecionado(s)'});
+$('selectAllDelete').onclick=()=>{for(const x of deleteCandidates())deleteSelection.add(delKey(x.kind,x.id));renderDeletion()};
+$('clearDelete').onclick=()=>{deleteSelection.clear();renderDeletion()};
+$('deleteSelectedBtn').onclick=()=>{
+ const kind=$('deleteType').value;const keys=[...deleteSelection].filter(x=>x.startsWith(kind+':'));if(!keys.length){toast('Selecione ao menos um material.');return}
+ const autor=$('deleteActor').value.trim(),motivo=$('deleteReason').value.trim();if(!autor||!motivo){toast('Informe o responsável e o motivo obrigatório.');return}
+ const selected=keys.map(k=>k.slice(kind.length+1)).sort((a,b)=>kind==='supplies'?Number(b)-Number(a):0);const items=[];let errors=[];
+ for(const id of selected){
+  if(kind==='equipment'){
+   const x=getEq(id);if(!x){errors.push('IMEI inexistente: '+id);continue}
+   if(db.moves.some(m=>m.imei===id)||db.protocols.some(p=>(p.imeis||[]).includes(id))){errors.push('IMEI '+id+' tem movimentações ou protocolos');continue}
+   items.push({kind,id,record:structuredClone(x),qty:1});
+  }else if(kind==='tags'){
+   const x=db.tags.find(t=>t.id===id);if(!x){errors.push('TAG inexistente: '+id);continue}
+   items.push({kind,id,record:structuredClone(x),qty:1});
+  }else if(kind==='chips'){
+   const x=getChip(id);if(!x){errors.push('ICCID inexistente: '+id);continue}
+   items.push({kind,id,record:structuredClone(x),qty:1});
+  }else{
+   const i=Number(id),x=db.supplies[i];if(!x){errors.push('Insumo não encontrado');continue}
+   const el=[...document.querySelectorAll('.del-qty')].find(z=>z.dataset.id===id);
+   if(!el){errors.push('Insumo fora da lista visível: '+x.material);continue}
+   const qty=Number(el.value);if(!Number.isInteger(qty)||qty<1||qty>Number(x.quantidade)){errors.push('Quantidade inválida para '+x.material);continue}
+   items.push({kind,id,record:structuredClone(x),qty});
+  }
+ }
+ if(errors.length){alert('Exclusão bloqueada. Corrija antes de continuar:\n'+errors.join('\n'));return}
+ const summary=items.map(x=>x.kind==='supplies'?`${x.qty} × ${x.record.material} (${x.record.unidade})`:x.id).join('\n');
+ if(!confirm(`ATENÇÃO: excluir ${items.length} registro(s)?\n\n${summary}\n\nResponsável: ${autor}\nMotivo: ${motivo}\n\nEsta ação altera o estoque local e não pode ser desfeita pela interface. Faça backup antes de prosseguir.`))return;
+ const timestamp=now();
+ for(const item of items){const {kind,id,record,qty}=item;
+  if(kind==='equipment'){
+   db.equipment=db.equipment.filter(x=>x.imei!==id);
+   for(const c of db.chips){if(c.imei===id){c.imei=null;c.vinculoPlanejado=false}}
+  }else if(kind==='chips'){
+   db.chips=db.chips.filter(x=>x.iccid!==id);
+   for(const e of db.equipment){if(e.chip===id){e.chip=null;e.chipPlanejado=false}}
+  }else{const x=db.supplies[Number(id)];x.quantidade-=qty}
+  db.deletedRecords.unshift({date:timestamp,type:kind,id:kind==='supplies'?`${record.unidade} / ${record.material}`:id,quantity:qty,record,autor,motivo});
+  log('EXCLUSÃO DE MATERIAL',kind==='supplies'?`${record.unidade} / ${record.material}`:id,autor,`Tipo ${kind}; quantidade ${qty}; motivo: ${motivo}; exclusão local`);
+ }
+ db.supplies=db.supplies.filter(x=>Number(x.quantidade)>0);
+ deleteSelection.clear();$('deleteActor').value='';$('deleteReason').value='';save();toast(`${items.length} registro(s) excluído(s) com auditoria.`);
+};
+
+let pendingReceipt=null;
+const receiptFile=document.getElementById('receiptFile'),receiptPreview=document.getElementById('receiptPreview'),receiptConfirm=document.getElementById('receiptConfirm');
+receiptFile.addEventListener('change',async()=>{
+  pendingReceipt=null;receiptConfirm.disabled=true;
+  const file=receiptFile.files[0];if(!file)return;
+  try{
+    const x=JSON.parse(await file.text());
+    if(!x.id||!x.unidade||!Array.isArray(x.equipment)||!Array.isArray(x.chips)||!Array.isArray(x.supplies))throw Error('Estrutura inválida');
+    if(db.receipts.some(r=>r.id===x.id))throw Error('Este recebimento já foi importado.');
+    const imeis=x.equipment.map(e=>String(e.imei)),iccids=x.chips.map(c=>String(c.iccid));
+    if(imeis.some(i=>!/^[0-9]{15}$/.test(i))||iccids.some(i=>!/^[0-9]{19,22}$/.test(i)))throw Error('IMEI ou ICCID com tamanho inválido.');
+    if(new Set(imeis).size!==imeis.length||new Set(iccids).size!==iccids.length)throw Error('Identificadores repetidos no arquivo.');
+    const repeatedE=imeis.filter(i=>getEq(i)),repeatedC=iccids.filter(i=>getChip(i));
+    if(repeatedE.length||repeatedC.length)throw Error(`Já cadastrados: ${repeatedE.length} IMEI(s) e ${repeatedC.length} ICCID(s). Entrada bloqueada para evitar duplicidade.`);
+    if(x.equipment.some(e=>e.chip)||x.chips.some(c=>c.imei))throw Error('O arquivo deve conter apenas pares planejados, não vínculos confirmados.');if(x.paresPlanejados){if(!Array.isArray(x.paresPlanejados)||x.paresPlanejados.some(p=>!imeis.includes(String(p.imei))||!iccids.includes(String(p.iccid)))||new Set(x.paresPlanejados.map(p=>p.imei)).size!==x.paresPlanejados.length||new Set(x.paresPlanejados.map(p=>p.iccid)).size!==x.paresPlanejados.length)throw Error('Pares planejados inválidos ou duplicados.');}
+    if(x.supplies.some(y=>!y.material||!Number.isInteger(Number(y.quantidade))||Number(y.quantidade)<0))throw Error('Insumo ou quantidade inválida.');
+    pendingReceipt=x;
+    receiptPreview.innerHTML=`<b>Pronto para importar:</b> ${x.equipment.length} rastreadores, ${x.chips.length} chips, ${x.supplies.reduce((a,b)=>a+Number(b.quantidade),0)} insumos na unidade ${esc(x.unidade)}.<p>Status técnico: aguardando verificação. Pares planejados: ${x.paresPlanejados?.length||0}. Não são vínculos confirmados na plataforma.</p>`;
+    receiptConfirm.disabled=false;
+  }catch(err){receiptPreview.textContent='Não foi possível preparar a entrada: '+err.message;}
+});
+receiptConfirm.addEventListener('click',()=>{
+ const x=pendingReceipt;if(!x)return;
+ if(db.receipts.some(r=>r.id===x.id)||x.equipment.some(e=>getEq(String(e.imei)))||x.chips.some(c=>getChip(String(c.iccid)))){toast('Conflito detectado: recarregue o arquivo e confira os registros.');return;}
+ const autor=prompt('Nome do colaborador que está registrando este recebimento:');if(!autor?.trim())return;
+ const stamp=now();
+ for(const e of x.equipment){db.equipment.push({imei:String(e.imei),modelo:e.modelo||'J16',origem:e.origem||'Novo',status:'AGUARDANDO VERIFICAÇÃO',local:x.unidade,chip:null});log('RECEBIMENTO RASTREADOR',String(e.imei),autor,`Entrada ${x.id} / ${x.unidade}; teste não confirmado`);}
+ for(const c of x.chips){db.chips.push({iccid:String(c.iccid),linha:c.linha||'Não informado',operadora:c.operadora||'Não informada',imei:null});log('RECEBIMENTO CHIP',String(c.iccid),autor,`Entrada ${x.id}; vínculo não informado`);}
+ for(const par of (x.paresPlanejados||[])){const eq=getEq(String(par.imei)),ch=getChip(String(par.iccid));eq.chip=ch.iccid;eq.chipPlanejado=true;ch.imei=eq.imei;ch.vinculoPlanejado=true;log('ASSOCIAÇÃO PLANEJADA',eq.imei,autor,`ICCID ${ch.iccid}; vínculo na plataforma ainda não confirmado`);}
+ for(const a of x.supplies){const old=db.supplies.find(y=>y.unidade===x.unidade&&y.material===a.material);if(old)old.quantidade+=Number(a.quantidade);else db.supplies.push({unidade:x.unidade,material:a.material,quantidade:Number(a.quantidade)});}
+ db.receipts.unshift({id:x.id,unidade:x.unidade,equipmentCount:x.equipment.length,chipCount:x.chips.length,cableCount:x.supplies.filter(a=>a.material==='Cabo').reduce((n,a)=>n+Number(a.quantidade),0),importedAt:stamp,autor});
+ log('RECEBIMENTO CONFIRMADO',x.id,autor,`${x.equipment.length} rastreadores, ${x.chips.length} chips, ${x.supplies.reduce((n,a)=>n+Number(a.quantidade),0)} insumos; origem ${x.fornecedor||'não informada'}`);
+ pendingReceipt=null;receiptConfirm.disabled=true;receiptFile.value='';receiptPreview.textContent='Entrada registrada neste navegador. Faça backup pelo menu Histórico.';save();toast('Recebimento importado com sucesso.');
+});
+
+// v0.7: entradas independentes, indicadores de associação e histórico selecionável.
+function updateBulkKind(){const k=$('bulkKind').value;$('bulkModelLabel').classList.toggle('hide',k!=='equipment');$('bulkMaterialLabel').classList.toggle('hide',k!=='supplies');$('bulkQtyLabel').classList.toggle('hide',k!=='supplies');$('bulkIdsLabel').classList.toggle('hide',k==='supplies');$('bulkIdsLabel').querySelector('textarea').placeholder=k==='chips'?'Um ICCID por linha':'Um IMEI por linha'}
+$('bulkKind').onchange=updateBulkKind;updateBulkKind();
+$('bulkEntryForm').onsubmit=ev=>{ev.preventDefault();const f=fields(ev.target),k=f.tipo,unit=f.unidade,autor=f.autor.trim();if(!autor)return;let ids=f.identificadores.split(/[\n,;]+/).map(x=>x.trim()).filter(Boolean);const tagOriginals={};if(k==='tags'){const parsed=ids.map(normalizeTagId);if(parsed.some(x=>!x)){alert('TAG: informe números com até 15 dígitos.');return}ids=parsed.map(x=>{tagOriginals[x.id]=x.original;return x.id})}let qty=0;if(k!=='supplies'){
+const pattern=k==='chips'?/^\d{19,22}$/:/^\d{15}$/;if(!ids.length||ids.some(x=>!pattern.test(x))||new Set(ids).size!==ids.length){alert('Confira os identificadores: um por linha, sem repetições.');return}const duplicates=ids.filter(x=>k==='chips'?getChip(x):k==='tags'?db.tags.some(t=>String(t.id).padStart(15,'0')===x)||!!getEq(x):getEq(x));if(duplicates.length){alert('Entrada bloqueada. Identificadores já cadastrados: '+duplicates.join(', '));return}qty=ids.length;
+}else{qty=Number(f.quantidade);if(!f.material.trim()||!Number.isSafeInteger(qty)||qty<=0){alert('Informe material e quantidade válida.');return}}
+const receiptId='ENT-'+Date.now()+'-'+Math.random().toString(36).slice(2,6);const stamp=now();if(!confirm('Confirmar entrada de '+qty+' unidade(s) em '+unit+'?'))return;
+if(k==='equipment')for(const imei of ids){db.equipment.push({imei,modelo:f.modelo.trim()||'Não informado',origem:'Novo',status:'AGUARDANDO VERIFICAÇÃO',local:unit,chip:null,receiptId});log('RECEBIMENTO RASTREADOR',imei,autor,'Entrada '+receiptId+' / '+unit)}
+if(k==='tags')for(const id of ids){db.tags.push({id,identificadorOriginal:tagOriginals[id],modelo:'TAG',local:unit,status:'AGUARDANDO VERIFICAÇÃO',ativacao:'NÃO CONFIRMADA',receiptId,createdAt:stamp});log('RECEBIMENTO TAG',id,autor,'Entrada '+receiptId+' / '+unit+'; original '+tagOriginals[id]+'; sem CHIP')}
+if(k==='chips')for(const iccid of ids){db.chips.push({iccid,linha:'Não informado',operadora:'Não informada',imei:null,local:unit,receiptId});log('RECEBIMENTO CHIP',iccid,autor,'Entrada '+receiptId+' / '+unit)}
+if(k==='supplies'){db.supplies.push({unidade:unit,material:f.material.trim(),quantidade:qty,receiptId});log('RECEBIMENTO INSUMO',receiptId,autor,qty+' × '+f.material+' / '+unit)}
+db.receipts.unshift({id:receiptId,unidade:unit,equipmentCount:k==='equipment'?qty:0,chipCount:k==='chips'?qty:0,tagCount:k==='tags'?qty:0,tagIds:k==='tags'?ids:[],cableCount:k==='supplies'&&f.material.toLowerCase()==='cabo'?qty:0,suppliesCount:k==='supplies'?qty:0,importedAt:stamp,autor,kind:k,identifiers:k==='supplies'?[]:ids,supplyMaterial:k==='supplies'?f.material.trim():null,supplyQuantity:k==='supplies'?qty:0});log('RECEBIMENTO CONFIRMADO',receiptId,autor,k+' / '+qty+' unidades / '+unit);ev.target.reset();updateBulkKind();save();toast('Entrada registrada com sucesso')};
+const oldRenderV07=render;
+render=function(){oldRenderV07();renderV07()};
+function renderV07(){const linkedC=db.chips.filter(c=>!!c.imei).length,linkedE=db.equipment.filter(e=>!!e.chip).length;const metrics=$('metrics');metrics.insertAdjacentHTML('beforeend', [['CHIPs associados',linkedC],['Rastreadores sem CHIP',db.equipment.length-linkedE],['Rastreadores com CHIP',linkedE],['CHIPs cadastrados',db.chips.length]].map(([name,num])=>'<div class="card"><span class="muted">'+name+'</span><strong>'+num+'</strong></div>').join(''));
+// Reconstruir histórico sem depender de identificadores guardados nas entradas antigas.
+const sections=[];for(const r of db.receipts){const rid=String(r.id);const es=db.equipment.filter(e=>e.receiptId===rid),cs=db.chips.filter(c=>c.receiptId===rid),ss=db.supplies.filter(x=>x.receiptId===rid);const isTagReceipt=rid.startsWith('TAG-')||r.kind==='tags';const isLegacy=!r.kind&&!isTagReceipt;const matchingTags=(r.tagIds||r.identifiers||[]).map(id=>db.tags.find(t=>String(t.id)===String(id))).filter(Boolean);const matchingEs=isLegacy?db.equipment.filter(e=>db.logs.some(l=>l.event==='RECEBIMENTO RASTREADOR'&&l.id===e.imei&&String(l.detail).includes(rid))):es;const matchingCs=isLegacy?db.chips.filter(c=>db.logs.some(l=>l.event==='RECEBIMENTO CHIP'&&l.id===c.iccid&&String(l.detail).includes(rid))):cs;const matchingSs=isTagReceipt?[]:isLegacy?db.supplies.filter(x=>x.unidade===r.unidade&&!x.receiptId):ss;
+const itemRow=(kind,id,label,local,detail)=>'<tr><td>'+(kind==='tags'?'—':'<input type="checkbox" class="history-pick" data-kind="'+kind+'" data-id="'+esc(id)+'" '+(deleteSelection.has(delKey(kind,id))?'checked':'')+'>')+'</td><td>'+esc(label)+'</td><td style="font-variant-numeric:tabular-nums">'+esc(kind==='supplies'?'—':id)+'</td><td>'+esc(local||'Não informado')+'</td><td>'+esc(detail)+'</td></tr>';
+let rows=matchingTags.map(t=>itemRow('tags',t.id,'TAG',t.local,t.status)).join('')+matchingEs.map(e=>itemRow('equipment',e.imei,e.modelo||'Não informado',e.local,e.status)).join('')+matchingCs.map(c=>itemRow('chips',c.iccid,'CHIP',c.local||getEq(c.imei)?.local||r.unidade,c.imei?(c.vinculoPlanejado?'ASSOCIAÇÃO PLANEJADA':'VINCULADO'):'DISPONÍVEL')).join('')+matchingSs.map(x=>{let idx=db.supplies.indexOf(x);return itemRow('supplies',idx,x.material,x.unidade,'Saldo '+x.quantidade)}).join('');
+sections.push('<details class="panel" style="margin-top:12px"><summary style="cursor:pointer"><b>'+esc(rid)+'</b> — '+esc(r.unidade)+' • '+esc(r.importedAt||'')+' • '+esc(r.autor||'')+'<div class="muted">Entrada original: '+Number(r.equipmentCount||0)+' rastreador(es), '+Number(r.chipCount||0)+' CHIP(s), '+Number(r.cableCount||r.suppliesCount||0)+' insumo(s)'+(Number(r.tagCount||0)?', '+Number(r.tagCount)+' TAG(s)':'')+'. Clique para expandir.</div></summary><div class="tablewrap" style="margin-top:12px"><table><thead><tr><th>Selecionar</th><th>Material</th><th>Identificador</th><th>Local</th><th>Situação atual</th></tr></thead><tbody>'+ (rows||'<tr><td colspan="5">Nenhum material ativo encontrado para esta entrada. Verifique exclusões no histórico.</td></tr>')+'</tbody></table></div></details>')}
+$('entryHistory').innerHTML=sections.join('')||'<p class="muted">Nenhum recebimento registrado.</p>';
+$('deletionHistory').innerHTML=(db.deletedRecords||[]).map(x=>'<p><b>'+esc(x.date)+'</b> — '+esc(x.type)+' / '+esc(x.id)+' • '+esc(x.quantity)+' unidade(s) • '+esc(x.autor)+' • '+esc(x.motivo)+'</p>').join('')||'<p class="muted">Nenhuma exclusão registrada.</p>';
+}
+$('entryHistory').addEventListener('change',e=>{const c=e.target.closest('.history-pick');if(!c)return;const key=delKey(c.dataset.kind,c.dataset.id);if(c.checked)deleteSelection.add(key);else deleteSelection.delete(key);$('deleteType').value=c.dataset.kind;renderDeletion();toast('Seleção preparada. Para concluir, vá até Backup e limpeza, confira o tipo e informe responsável e motivo.')});
+render();
+
+// v0.13: auditoria compacta por recebimento; detalhes preservam todos os eventos.
+function renderCompactAudit(){
+ const target=$('logRows');if(!target)return;
+ const q=$('logSearch').value.trim().toLowerCase();
+ const logs=db.logs||[];
+ const receipts=db.receipts||[];
+ const groups=[];
+ const used=new Set();
+ const childEvents=new Set(['RECEBIMENTO RASTREADOR','RECEBIMENTO CHIP','RECEBIMENTO INSUMO','ASSOCIAÇÃO PLANEJADA']);
+ // Vincula TAGs ao recebimento real pelo identificador, sem depender da ordem dos logs.
+ for(const receipt of receipts.filter(r=>Array.isArray(r.tagIds)&&r.tagIds.length)){
+   const ids=new Set(receipt.tagIds.map(x=>String(x).padStart(15,'0')));
+   const members=logs.map((l,i)=>({l,i})).filter(({l})=>l.event==='ENTRADA TAG'&&ids.has(String(l.id).padStart(15,'0')));
+   if(!members.length)continue;
+   members.forEach(({i})=>used.add(i));
+   groups.push({entry:{date:receipt.importedAt||members[0].l.date,event:'ENTRADA DE TAGS',id:receipt.id,autor:receipt.autor||members[0].l.autor,detail:members.length+' TAG(s) cadastrada(s)'},members:members.map(x=>x.l),unit:receipt.unidade});
+ }
+ // Agrupa recebimentos tradicionais e mantém seus eventos vinculados.
+ for(let i=0;i<logs.length;i++){
+   if(used.has(i))continue;
+   const entry=logs[i];
+   if(entry.event!=='RECEBIMENTO CONFIRMADO')continue;
+   const members=[];let j=i+1;
+   while(j<logs.length&&childEvents.has(logs[j].event)&&logs[j].date===entry.date&&logs[j].autor===entry.autor){if(!used.has(j)){members.push(logs[j]);used.add(j)}j++}
+   used.add(i);
+   const receipt=receipts.find(r=>String(r.id)===String(entry.id));
+   groups.push({entry,members,unit:receipt?.unidade});
+ }
+ // Qualquer evento novo também será exibido dentro de menu suspenso.
+ for(let i=0;i<logs.length;i++){
+   if(used.has(i))continue;
+   const entry=logs[i];
+   const members=[entry];used.add(i);
+   // Eventos consecutivos iguais, da mesma data e responsável, formam um grupo.
+   for(let j=i+1;j<logs.length;j++){
+     const l=logs[j];
+     if(used.has(j))continue;
+     if(l.event===entry.event&&l.date===entry.date&&l.autor===entry.autor){members.push(l);used.add(j)}
+   }
+   groups.push({entry,members,unit:''});
+ }
+ const subgroup=(name,items)=>!items.length?'':'<div class="audit-select-group"><label class="audit-select-label">'+items.length+' '+esc(name)+'</label><select class="audit-select" aria-label="Consultar '+esc(name)+'"><option value="">Selecione para consultar um identificador</option>'+items.map((x,i)=>'<option value="'+i+'">'+esc(x.id)+'</option>').join('')+'</select><div class="audit-select-info muted" aria-live="polite">Escolha um item da lista para visualizar os detalhes.</div><div class="audit-select-data hide">'+items.map(x=>'<div>'+esc(x.detail)+'</div>').join('')+'</div></div>';
+ const getUnit=g=>g.unit||((g.entry.detail||'').match(/(?:Unidade Central|Unidade Norte|Unidade Sul|Unidade Leste|Unidade Oeste|Unidade Regional)/i)||[])[0]||((g.members[0]?.detail||'').match(/(?:Unidade Central|Unidade Norte|Unidade Sul|Unidade Leste|Unidade Oeste|Unidade Regional)/i)||[])[0]||'—';
+ const byDate=new Map();
+ for(const g of groups){
+   const e=g.entry,m=g.members;
+   const searchable=[e,...m].map(x=>[x.date,x.event,x.id,x.autor,x.detail].join(' ')).join(' ').toLowerCase();
+   if(q&&!searchable.includes(q))continue;
+   const tags=m.filter(x=>x.event==='ENTRADA TAG');
+   const trackers=m.filter(x=>x.event==='RECEBIMENTO RASTREADOR');
+   const chips=m.filter(x=>x.event==='RECEBIMENTO CHIP');
+   const pairs=m.filter(x=>x.event==='ASSOCIAÇÃO PLANEJADA');
+   const supplies=m.filter(x=>x.event==='RECEBIMENTO INSUMO');
+   const categorized=new Set([...tags,...trackers,...chips,...pairs,...supplies]);
+   const others=m.filter(x=>!categorized.has(x));
+   const groupsHtml=subgroup('TAGs (identificador)',tags)+subgroup('rastreadores (IMEI)',trackers)+subgroup('CHIPs (ICCID)',chips)+subgroup('associações planejadas',pairs)+subgroup('registros de insumos',supplies)+subgroup('outros eventos',others);
+   const countLabel=[tags.length&&tags.length+' TAGs',trackers.length&&trackers.length+' rastreadores',chips.length&&chips.length+' CHIPs',supplies.length&&supplies.length+' insumos',others.length&&others.length+' evento(s)'].filter(Boolean).join(' • ');
+   const title=e.event==='ENTRADA DE TAGS'?'ENTRADA DE TAGS':e.event==='RECEBIMENTO CONFIRMADO'?'ENTRADA DE MATERIAIS':e.event;
+   const detail='<details class="audit-receipt-details" '+(q?'open':'')+'><summary><span>Consultar registros</span><small>'+esc(countLabel||e.detail||'1 registro')+'</small></summary><div class="audit-receipt-content"><div class="audit-group-grid">'+groupsHtml+'</div></div></details>';
+   const html='<tr class="audit-receipt-row"><td>'+esc(e.date)+'</td><td><b>'+esc(title)+'</b></td><td>'+esc(e.id)+'</td><td>'+esc(getUnit(g))+'</td><td>'+esc(e.autor)+'</td><td>'+detail+'</td></tr>';
+   const day=(String(e.date).match(/\d{2}\/\d{2}\/\d{4}/)||[])[0]||String(e.date).split(',')[0];
+   if(!byDate.has(day))byDate.set(day,[]);
+   byDate.get(day).push(html);
+ }
+ if(!byDate.size){target.innerHTML='<tr><td colspan="6">Nenhum evento encontrado.</td></tr>';return}
+ target.innerHTML=[...byDate.entries()].map(([day,rows])=>'<tr class="audit-date-row"><td colspan="6"><details class="audit-date-details" '+(q?'open':'')+'><summary><span class="audit-date-label">'+esc(day)+'</span><span class="audit-date-count">'+rows.length+' grupo(s) • Clique para consultar</span></summary><div class="audit-date-body"><div class="tablewrap"><table class="audit-date-table"><thead><tr><th>Data e hora</th><th>Evento</th><th>Identificador</th><th>Local</th><th>Responsável</th><th>Detalhes</th></tr></thead><tbody>'+rows.join('')+'</tbody></table></div></div></details></td></tr>').join('');
+}
+const previousRenderCompact=render;
+render=function(){previousRenderCompact();renderCompactAudit()};
+$('logRows').addEventListener('change',event=>{const select=event.target.closest('.audit-select');if(!select)return;const group=select.closest('.audit-select-group');const detail=group.querySelector('.audit-select-info');const index=select.value;const values=group.querySelector('.audit-select-data').children;detail.textContent=index===''?'Escolha um item da lista para visualizar os detalhes.':values[Number(index)]?.textContent||'Detalhes indisponíveis';});
+$('logSearch').oninput=renderCompactAudit;
+renderCompactAudit();
+
+</script><script id="metrics-layout-script-v18">
+function arrangeMetricsV18(){
+ const container=document.getElementById('metrics');if(!container)return;
+ const cards=Array.from(container.querySelectorAll('.card'));
+ const byName=new Map(cards.map(c=>[c.querySelector('.muted')?.textContent?.trim(),c]));
+ const relayQty=(db.supplies||[]).filter(x=>/\brel[eê]s?\b/i.test(String(x.material||'').trim())).reduce((n,x)=>n+(Number(x.quantidade)||0),0);
+ let relay=byName.get('Relês em estoque');
+ if(!relay){relay=document.createElement('div');relay.className='card';relay.innerHTML='<span class="muted">Relês em estoque</span><strong></strong>';}
+ relay.querySelector('strong').textContent=String(relayQty);
+ byName.set('Relês em estoque',relay);
+ const groups=[
+  ['TAGs'],
+  ['CHIPs disponíveis','CHIPs associados','CHIPs cadastrados'],
+  ['Rastreadores','Prontos no estoque','Em testes','Defeituosos','Rastreadores sem CHIP','Rastreadores com CHIP','Protocolos abertos'],
+  ['Cabos em estoque'],
+  ['Relês em estoque']
+ ];
+ const fragment=document.createDocumentFragment();
+ for(const names of groups){
+  const row=document.createElement('div');row.className='metric-row';
+  for(const name of names){const card=byName.get(name);if(card)row.appendChild(card);}
+  fragment.appendChild(row);
+ }
+ container.replaceChildren(fragment);
+}
+const renderBeforeMetricsV18=render;
+render=function(){renderBeforeMetricsV18();arrangeMetricsV18()};
+arrangeMetricsV18();
+</script><script id="modern-tech-v23-script">
+(function(){
+ const init=()=>{
+  const nav=document.getElementById('nav');if(!nav||document.querySelector('.tech-sidebar'))return;
+  document.body.classList.add('tech-layout');
+  const aside=document.createElement('aside');aside.className='tech-sidebar';aside.setAttribute('aria-label','Menu principal SmartStock');
+  const brand=document.createElement('div');brand.className='tech-brand';brand.innerHTML='<span class="tech-brand-icon">S</span><span><strong>Smart Stock</strong><small>Portfólio • Demonstração</small></span>';
+  aside.appendChild(brand);
+  const lbl=document.createElement('div');lbl.className='tech-menu-label';lbl.textContent='Navegação';aside.appendChild(lbl);
+  nav.parentNode.removeChild(nav);aside.appendChild(nav);
+  const icons={recebimentos:'⇩',painel:'▦',equipamentos:'◈',chips:'▤',tags:'◇',movimentos:'⇄',protocolos:'▣',historico:'◷',usuarios:'♙'};
+  nav.querySelectorAll('button[data-tab]').forEach(b=>{const ic=document.createElement('span');ic.className='tech-icon';ic.setAttribute('aria-hidden','true');ic.textContent=icons[b.dataset.tab]||'•';b.prepend(ic);b.addEventListener('click',()=>{aside.classList.remove('open');updateTitle(b.dataset.tab)})});
+  const foot=document.createElement('div');foot.className='tech-sidebar-footer';foot.textContent='SmartStock Demonstração interativa\nProtótipo local — acesso não autenticado';aside.appendChild(foot);
+  document.body.prepend(aside);
+  const toggle=document.createElement('button');toggle.type='button';toggle.className='tech-mobile-toggle';toggle.textContent='☰';toggle.setAttribute('aria-label','Abrir menu');toggle.onclick=()=>aside.classList.toggle('open');document.body.prepend(toggle);
+  const main=document.querySelector('main');const title=document.createElement('div');title.className='tech-page-title';title.innerHTML='<div><strong id="tech-current-title">Painel operacional</strong><small>Plataforma Unificada de Gestão, Operações e Rastreabilidade</small></div><span class="tech-page-pill">AMBIENTE LOCAL</span>';const notice=main.querySelector('.notice');notice.after(title);
+  const header=document.querySelector('body>header');const mode=document.createElement('button');mode.className='tech-mode';mode.type='button';mode.textContent='◐ Modo escuro';mode.onclick=()=>{document.body.classList.toggle('tech-dark');mode.textContent=document.body.classList.contains('tech-dark')?'☀ Modo claro':'◐ Modo escuro'};header.appendChild(mode);
+  const names={operacoes:'Lotes e transferências',recebimentos:'Recebimentos',painel:'Painel operacional',equipamentos:'Rastreadores',chips:'CHIPs',tags:'TAGs',movimentos:'Movimentações',protocolos:'Protocolos',historico:'Histórico e auditoria',usuarios:'Usuários e permissões'};
+  function updateTitle(tab){const t=document.getElementById('tech-current-title');if(t)t.textContent=names[tab]||'SmartStock'}
+  const current=nav.querySelector('button.active');if(current)updateTitle(current.dataset.tab);
+  const footer=document.querySelector('body>footer');if(footer)footer.textContent='© 2026 Pedro Henrique Gonçalves. Todos os direitos reservados. Smart Stock — Plataforma Unificada de Gestão, Operações e Rastreabilidade.';
+  const noticeText=main.querySelector('.notice');if(noticeText)noticeText.innerHTML='<b>Demonstração com dados fictícios:</b> dados armazenados somente neste navegador (localStorage). O layout de usuários é demonstrativo; ainda não existe autenticação, controle de permissões ou sincronização entre unidades. Não publique backups ou dados reais no GitHub.';
+  const badge=header.querySelector(':scope > span');if(badge)badge.textContent='Demonstração interativa';
+ };
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+<style>
+.reverse-intro{padding:16px;border-radius:12px;background:linear-gradient(115deg,#e8f3ff,#f0eaff);border:1px solid #c7d8f4;margin-bottom:16px}
+.reverse-intro h2{margin:0 0 8px;color:#20335b}.reverse-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:14px 0}.reverse-stat{background:var(--card,#fff);border:1px solid #dce4ed;border-radius:12px;padding:15px}.reverse-stat strong{display:block;font-size:28px;color:#2563eb}.reverse-stat span{font-size:12px;color:#64748b}
+.reverse-timeline{border-left:3px solid #7c3aed;padding-left:15px;margin:10px 0}.reverse-event{padding:9px 12px;margin:10px 0;background:rgba(125,130,150,.07);border-radius:8px}.reverse-event small{display:block;color:#64748b}
+.reverse-filter{max-width:360px}.reverse-form label{min-width:190px}.reverse-note{color:#64748b;font-size:12px}.reverse-table{overflow-x:auto}
+</style>
+<script>
+(()=>{
+'use strict';
+const KEY_REV='smartstock_portfolio_reverse_v024';
+const read=()=>{try{const v=JSON.parse(localStorage.getItem(KEY_REV));return Array.isArray(v)?v:[]}catch{return []}};
+let cycles=read();const el=id=>document.getElementById(id);const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const units=['Unidade Central','Unidade Norte','Unidade Sul','Unidade Leste','Unidade Oeste','Unidade Regional'];
+const unitOptions=units.map(u=>'<option>'+safe(u)+'</option>').join('');
+const statuses=['AGUARDANDO VERIFICAÇÃO','INTERNO','INTERNO/BLOQUEIO','INTERNO/BANCADA','PRONTO','DEFEITO'];
+const statusOptions=statuses.map(s=>'<option>'+s+'</option>').join('');
+const nav=el('nav');const button=document.createElement('button');button.type='button';button.dataset.tab='reversa';button.textContent='↺  Logística Reversa';nav.insertBefore(button,nav.querySelector('[data-tab="usuarios"]'));
+const section=document.createElement('section');section.id='reversa';section.className='hide';
+section.innerHTML=`<div class="reverse-intro"><h2>↺ Logística Reversa</h2><p>Controle dos rastreadores recuperados, separado do estoque de equipamentos novos. Cada retirada gera um novo ciclo para o mesmo IMEI, preservando a trajetória anterior.</p><p class="reverse-note">Demonstração local, sem integração com banco ou plataforma externa. Use somente dados fictícios nesta publicação.</p></div>
+<div class="reverse-grid" id="reverseMetrics"></div>
+<div class="panel"><h2>1. Registrar retirada do veículo</h2><form id="reverseNew" class="reverse-form">
+<label>Identificação do veículo<select name="tipoVeiculo"><option value="PLACA">Placa</option><option value="CHASSI">Chassi</option></select></label>
+<label>Placa ou chassi<input name="veiculo" required maxlength="30" placeholder="ABC1D23 ou chassi"></label>
+<label>IMEI do rastreador<input name="imei" required inputmode="numeric" pattern="[0-9]{15}" maxlength="15" placeholder="15 dígitos"></label>
+<label>ICCID retirado<input name="iccid" required inputmode="numeric" pattern="([0-9]{19,22}|00000000)" placeholder="19–22 dígitos ou 00000000"></label>
+<label>Modelo<input name="modelo" required value="J16"></label>
+<label>Técnico responsável<input name="tecnico" required maxlength="100"></label>
+<label>Modalidade<select name="modalidade"><option>Base fixa</option><option>Volante</option></select></label>
+<label>Unidade do técnico<select name="unidadeTecnico">${unitOptions}</select></label>
+<label>Data e hora da retirada<input name="retiradaEm" type="datetime-local" required></label>
+<label>Observações<textarea name="observacao" placeholder="Condição, lacres, avarias..."></textarea></label>
+<button type="submit">Registrar retirada</button></form></div>
+<div class="panel"><h2>2. Recebimento na base</h2><form id="reverseReceive" class="reverse-form"><label>Ciclo pendente<select name="ciclo" id="reversePending" required></select></label><label>Base que recebeu<select name="base">${unitOptions}</select></label><label>Quem recebeu<input name="recebedor" required></label><label>Data e hora do recebimento<input name="recebidoEm" type="datetime-local" required></label><label>Condição na chegada<textarea name="condicao" placeholder="Teste visual e condição do material"></textarea></label><button>Confirmar recebimento</button></form></div>
+<div class="panel"><h2>3. Reconfiguração e destino do CHIP</h2><form id="reverseConfigure" class="reverse-form"><label>Ciclo recebido<select name="ciclo" id="reverseReceived" required></select></label><label>Decisão sobre o CHIP<select name="chipDecisao" id="reverseChipDecision"><option value="REUTILIZAR">Reutilizar CHIP antigo</option><option value="SUBSTITUIR">Configurar CHIP novo</option></select></label><label>ICCID novo (se substituir)<input name="iccidNovo" inputmode="numeric" placeholder="19–22 dígitos"></label><label>Status técnico<select name="status">${statusOptions}</select></label><label>Responsável pela configuração<input name="configurador" required></label><label>Data e hora da configuração<input name="configuradoEm" type="datetime-local" required></label><label>Observações<textarea name="observacao" placeholder="Protocolo, testes e decisões"></textarea></label><button>Registrar configuração</button></form><p class="reverse-note">Os estados técnicos são os mesmos dos rastreadores novos. A substituição do CHIP mantém o ICCID anterior no histórico.</p></div>
+<div class="panel"><h2>4. Histórico e ciclos de vida por IMEI</h2><label>Pesquisar IMEI<input class="reverse-filter" id="reverseSearch" placeholder="Digite um IMEI ou parte dele"></label><div id="reverseHistory"></div></div>
+<div class="panel"><h2>5. Equipamentos recuperados</h2><div class="reverse-table"><table><thead><tr><th>IMEI</th><th>Veículo de origem</th><th>Retirada</th><th>Base de destino</th><th>CHIP</th><th>Status</th><th>Ciclo</th></tr></thead><tbody id="reverseRows"></tbody></table></div></div>`;
+nav.closest('main').appendChild(section);
+function appendEvent(c,type,person,detail,at){c.events.push({type,person,detail,at:at||new Date().toISOString()})}
+function persist(){localStorage.setItem(KEY_REV,JSON.stringify(cycles));draw()}
+function time(v){return v?new Date(v).toLocaleString('pt-BR'):'—'}
+function draw(){const latest=new Map();cycles.forEach(c=>latest.set(c.imei,c));const arr=[...latest.values()];const pending=cycles.filter(c=>!c.recebidoEm);const received=cycles.filter(c=>c.recebidoEm&&!c.configuradoEm);
+el('reverseMetrics').innerHTML=[['Equipamentos recuperados',latest.size],['Ciclos de retirada',cycles.length],['Aguardando recebimento',pending.length],['Aguardando configuração',received.length],['Prontos',arr.filter(c=>c.status==='PRONTO').length],['CHIPs substituídos',cycles.filter(c=>c.chipDecisao==='SUBSTITUIR').length]].map(([label,num])=>'<div class="reverse-stat"><span>'+label+'</span><strong>'+num+'</strong></div>').join('');
+const options=(items)=>items.map(c=>'<option value="'+safe(c.id)+'">'+safe(c.imei)+' · '+safe(c.veiculo)+' · '+safe(c.id)+'</option>').join('');el('reversePending').innerHTML=options(pending);el('reverseReceived').innerHTML=options(received);
+el('reverseRows').innerHTML=cycles.slice().reverse().map(c=>'<tr><td>'+safe(c.imei)+'</td><td>'+safe(c.tipoVeiculo)+' '+safe(c.veiculo)+'</td><td>'+time(c.retiradaEm)+'</td><td>'+safe(c.base||'Aguardando')+'</td><td>'+safe(c.iccidAtual||c.iccid)+'</td><td>'+safe(c.status)+'</td><td>'+safe(c.id)+'</td></tr>').join('')||'<tr><td colspan="7">Nenhuma retirada registrada.</td></tr>';
+const q=el('reverseSearch').value.trim();const grouped=[...new Set(cycles.map(c=>c.imei))].filter(imei=>imei.includes(q));el('reverseHistory').innerHTML=grouped.map(imei=>{const group=cycles.filter(c=>c.imei===imei);const events=group.flatMap(c=>c.events.map(e=>({...e,cycle:c.id}))).sort((a,b)=>new Date(a.at)-new Date(b.at));return '<details class="panel" '+(q?'open':'')+'><summary><b>IMEI '+safe(imei)+'</b> · '+group.length+' ciclo(s) · '+events.length+' evento(s)</summary><div class="reverse-timeline">'+events.map(e=>'<div class="reverse-event"><b>'+safe(e.type)+'</b><small>'+time(e.at)+' · '+safe(e.person)+' · Ciclo '+safe(e.cycle)+'</small><div>'+safe(e.detail)+'</div></div>').join('')+'</div></details>'}).join('')||'<p class="muted">Nenhum IMEI encontrado.</p>';
+}
+function values(form){return Object.fromEntries(new FormData(form).entries())}
+function validDate(v){return !!v&&!Number.isNaN(new Date(v).getTime())}
+function checkIccid(v){return /^(?:[0-9]{19,22}|00000000)$/.test(v)}
+function getCycle(id){return cycles.find(c=>c.id===id)}
+el('reverseNew').addEventListener('submit',e=>{e.preventDefault();const f=values(e.target);if(!/^\d{15}$/.test(f.imei)||!checkIccid(f.iccid)||!validDate(f.retiradaEm)){alert('Verifique IMEI, ICCID e data da retirada.');return}if(cycles.some(c=>c.imei===f.imei&&(!c.recebidoEm||!c.configuradoEm))){alert('Existe um ciclo em andamento para este IMEI. Conclua-o antes de abrir outro.');return}const id='LR-'+String(Date.now())+'-'+String(cycles.length+1);const c={...f,id,status:'AGUARDANDO VERIFICAÇÃO',events:[]};appendEvent(c,'RETIRADA',f.tecnico,f.tipoVeiculo+' '+f.veiculo+' · '+f.modalidade+' · '+f.unidadeTecnico+' · ICCID '+f.iccid+' · '+(f.observacao||'Sem observações'),f.retiradaEm);cycles.push(c);persist();e.target.reset();alert('Retirada registrada no histórico local.');});
+el('reverseReceive').addEventListener('submit',e=>{e.preventDefault();const f=values(e.target),c=getCycle(f.ciclo);if(!c||c.recebidoEm||!validDate(f.recebidoEm)||new Date(f.recebidoEm)<new Date(c.retiradaEm)){alert('Confira o ciclo e a data de recebimento.');return}Object.assign(c,{base:f.base,recebedor:f.recebedor,recebidoEm:f.recebidoEm});appendEvent(c,'RECEBIMENTO NA BASE',f.recebedor,f.base+' · '+(f.condicao||'Sem observações'),f.recebidoEm);persist();e.target.reset();alert('Recebimento registrado.');});
+el('reverseConfigure').addEventListener('submit',e=>{e.preventDefault();const f=values(e.target),c=getCycle(f.ciclo);if(!c||!c.recebidoEm||c.configuradoEm||!validDate(f.configuradoEm)||new Date(f.configuradoEm)<new Date(c.recebidoEm)){alert('Confira o ciclo e a data de configuração.');return}if(f.chipDecisao==='SUBSTITUIR'&&!/^[0-9]{19,22}$/.test(f.iccidNovo)){alert('Informe o novo ICCID com 19 a 22 dígitos.');return}if(f.chipDecisao==='REUTILIZAR'&&c.iccid==='00000000'){alert('ICCID antigo ilegível: não é possível registrar reutilização sem identificação. Escolha CHIP novo.');return}Object.assign(c,{chipDecisao:f.chipDecisao,iccidAtual:f.chipDecisao==='SUBSTITUIR'?f.iccidNovo:c.iccid,status:f.status,configuradoEm:f.configuradoEm,configurador:f.configurador});appendEvent(c,'RECONFIGURAÇÃO',f.configurador,'CHIP '+(f.chipDecisao==='SUBSTITUIR'?'substituído: '+c.iccid+' → '+f.iccidNovo:'antigo reutilizado: '+c.iccid)+' · Status '+f.status+' · '+(f.observacao||'Sem observações'),f.configuradoEm);persist();e.target.reset();alert('Configuração registrada.');});
+el('reverseSearch').addEventListener('input',draw);draw();
+})();
+</script>
+<style>
+/* SmartStock v0.25 - apresentação do portfólio sem modificar módulos legados */
+#portfolioHero{background:linear-gradient(115deg,#111e3c,#253f87 62%,#43358c);color:white;padding:25px;border-radius:18px;margin:0 0 18px;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(190px,1fr);gap:18px;box-shadow:0 12px 32px #17255418}
+#portfolioHero h2{color:white;font-size:25px;margin:8px 0}#portfolioHero p{color:#dbeafe;margin:8px 0 15px;line-height:1.55}#portfolioHero .eyebrow{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#a5f3fc;font-weight:800}#portfolioHero .hero-tags{display:flex;gap:7px;flex-wrap:wrap}#portfolioHero .hero-tags span{border:1px solid #ffffff40;border-radius:30px;padding:5px 9px;font-size:11px;background:#ffffff12}#portfolioHero .hero-actions{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px}#portfolioHero button{background:#fff;color:#1d4ed8;border:0;border-radius:10px;padding:12px 16px;cursor:pointer;font-weight:800;width:100%;max-width:230px}#portfolioHero button.alt{background:transparent;color:white;border:1px solid #ffffff70}
+#portfolioMetrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}#portfolioMetrics .pmetric{padding:17px;background:var(--card,#fff);border:1px solid #dfe6f3;border-radius:14px;min-width:0}#portfolioMetrics .pmetric span{display:block;color:#64748b;font-size:12px}#portfolioMetrics .pmetric strong{font-size:29px;display:block;margin:6px 0;color:#172554}#portfolioMetrics .pmetric small{font-size:11px;color:#64748b}
+#portfolioCharts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}#portfolioCharts .pchart{padding:18px;background:var(--card,#fff);border:1px solid #dfe6f3;border-radius:14px;min-width:0}#portfolioCharts h3{margin:0 0 14px;font-size:15px}#portfolioCharts .barrow{display:grid;grid-template-columns:105px 1fr 35px;gap:9px;align-items:center;margin:12px 0;font-size:12px}#portfolioCharts .track{height:10px;border-radius:99px;background:#e8edf7;overflow:hidden}#portfolioCharts .fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#2563eb,#7c3aed)}#portfolioCharts .barrow b{text-align:right}
+#portfolioTech{background:var(--card,#fff);border:1px solid #dfe6f3;border-radius:14px;padding:18px;margin-bottom:18px}#portfolioTech h3{margin:0 0 10px;font-size:15px}#portfolioTech p{font-size:13px;color:#64748b;line-height:1.6}#portfolioTech .tech-tags{display:flex;gap:7px;flex-wrap:wrap}#portfolioTech .tech-tags span{font-size:11px;border-radius:8px;background:#eef2ff;color:#3730a3;padding:7px 9px}
+#painel #metrics{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(175px,1fr))!important;gap:12px!important}#painel #metrics .card{min-width:0!important;width:auto!important;margin:0!important;min-height:85px!important}#painel #metrics .card strong{font-size:23px!important}
+body.tech-dark #portfolioMetrics .pmetric strong{color:#e2e8f0}
+@media(max-width:900px){#portfolioMetrics{grid-template-columns:repeat(2,minmax(0,1fr))}#portfolioCharts{grid-template-columns:1fr}}@media(max-width:600px){#portfolioHero{grid-template-columns:1fr}#portfolioHero .hero-actions{flex-direction:row}#portfolioHero button{font-size:11px}#portfolioCharts .barrow{grid-template-columns:88px 1fr 28px}}
+</style>
+<script>
+(()=>{
+ 'use strict';
+ const q=id=>document.getElementById(id);
+ const fmt=n=>Number(n||0).toLocaleString('pt-BR');
+ const panel=q('painel');if(!panel)return;
+ const hero=document.createElement('div');hero.id='portfolioHero';hero.innerHTML=`<div><div class="eyebrow">Projeto autoral · Demonstração pública</div><h2>Controle inteligente, do recebimento à reutilização.</h2><p>Uma plataforma unificada para rastreadores novos, CHIPs, TAGs, insumos, movimentações, protocolos e Logística Reversa — com rastreabilidade por identificador.</p><div class="hero-tags"><span>Estoque multunidade</span><span>IMEI / ICCID</span><span>Logística Reversa</span><span>Histórico de operações</span></div></div><div class="hero-actions"><button type="button" id="portfolioExplore">Explorar Logística Reversa</button><button type="button" class="alt" id="portfolioDemo">Carregar dados fictícios</button><small style="color:#dbeafe;text-align:center">Demonstração local, sem backend</small></div>`;
+ const metrics=document.createElement('div');metrics.id='portfolioMetrics';
+ const charts=document.createElement('div');charts.id='portfolioCharts';
+ const tech=document.createElement('div');tech.id='portfolioTech';tech.innerHTML='<h3>Sobre o projeto e a arquitetura</h3><p>SmartStock é um projeto independente de gestão e rastreabilidade de ativos. Esta versão é um protótipo navegável em HTML, CSS e JavaScript, com persistência apenas no navegador. Autenticação, auditoria de servidor, integração com banco de dados e operação multiusuário pertencem à evolução planejada, não a esta demonstração.</p><div class="tech-tags"><span>HTML5</span><span>CSS3</span><span>JavaScript</span><span>localStorage (demo)</span><span>GitHub Pages</span><span>Supabase / PostgreSQL (em desenvolvimento)</span><span>Arquitetura SaaS modular (planejada)</span></div>';
+ const old=panel.querySelector('#metrics');if(old){old.before(hero,metrics,charts,tech)}else panel.prepend(hero,metrics,charts,tech);
+ const demoEquip=[
+ ['990000000000101','J16','PRONTO','Unidade Central','Novo'],['990000000000102','J16','INTERNO','Unidade Norte','Novo'],['990000000000103','J16','INTERNO/BANCADA','Unidade Sul','Novo'],['990000000000104','J16','PRONTO','Unidade Central','Novo'],['990000000000105','J16','DEFEITO','Indisponível','Novo'],['990000000000106','J16','PRONTO','Unidade Regional','Novo'],['990000000000107','J16','INTERNO/BLOQUEIO','Unidade Oeste','Novo'],['990000000000108','J16','PRONTO','Unidade Leste','Novo']
+ ];
+ const demoChip=['8999000000000000101','8999000000000000102','8999000000000000103','8999000000000000104','8999000000000000105'];
+ const demoTags=['000000000000201','000000000000202','000000000000203'];
+ function addDemo(){
+  if(typeof db==='undefined'||typeof save!=='function'){alert('Aguarde a inicialização do painel.');return}
+  let added=0;
+  demoEquip.forEach(([imei,modelo,status,local,origem])=>{if(!db.equipment.some(e=>e.imei===imei)){db.equipment.push({imei,modelo,status,local,origem,autor:'Equipe demonstrativa',chip:null,portfolioDemo:true});added++}});
+  demoChip.forEach((iccid,i)=>{if(!db.chips.some(c=>c.iccid===iccid)){db.chips.push({iccid,linha:'Não informado',operadora:i%2?'Claro':'Vivo',autor:'Equipe demonstrativa',imei:null,portfolioDemo:true});added++}});
+  demoTags.forEach((id,i)=>{if(!db.tags.some(t=>t.id===id)){db.tags.push({id,modelo:'TAG',local:'Unidade Central',status:i===1?'INTERNO':'PRONTO',ativacao:'NÃO CONFIRMADA',portfolioDemo:true});added++}});
+  if(!db.supplies.some(s=>s.portfolioDemo)){db.supplies.push({material:'Cabo',quantidade:42,unidade:'Unidade Central',portfolioDemo:true},{material:'Relé',quantidade:12,unidade:'Unidade Norte',portfolioDemo:true});added+=2}
+  if(added){if(typeof log==='function')log('DEMONSTRAÇÃO','PORTFOLIO','Sistema','Inseridos '+added+' registros fictícios identificados como demonstração');save()}
+  localStorage.setItem('smartstock_portfolio_demo_v025','loaded');update();alert(added?'Dados fictícios adicionados: '+added+' registros.':'Os dados fictícios já estão carregados.');
+ }
+ function update(){if(typeof db==='undefined')return;const eq=db.equipment||[],chips=db.chips||[],tags=db.tags||[],rev=(()=>{try{return JSON.parse(localStorage.getItem('smartstock_portfolio_reverse_v024'))||[]}catch{return []}})();
+  const fresh=eq.filter(e=>e.origem!=='Reutilizado').length;const reused=eq.filter(e=>e.origem==='Reutilizado').length;const available=eq.filter(e=>e.status==='PRONTO').length;
+  const values=[['Rastreadores novos',fresh,'Cadastro e configuração'],['Rastreadores reutilizados',reused,'Estoque principal'],['CHIPs cadastrados',chips.length,'Controle por ICCID'],['TAGs',tags.length,'Cadastro independente'],['Equipamentos prontos',available,'Status técnico'],['Ciclos reversos',rev.length,'Histórico por IMEI'],['Movimentações',(db.moves||[]).length,'Fluxo de custódia'],['Protocolos',(db.protocols||[]).length,'Entregas a técnicos']];
+  metrics.innerHTML=values.map(([label,num,desc])=>'<div class="pmetric"><span>'+label+'</span><strong>'+fmt(num)+'</strong><small>'+desc+'</small></div>').join('');
+  const states=[['Prontos',eq.filter(e=>e.status==='PRONTO').length],['Em configuração',eq.filter(e=>String(e.status).startsWith('INTERNO')).length],['Defeituosos',eq.filter(e=>e.status==='DEFEITO').length],['Outros',eq.filter(e=>!['PRONTO','DEFEITO'].includes(e.status)&&!String(e.status).startsWith('INTERNO')).length]];
+  const types=[['Rastreadores',eq.length],['CHIPs',chips.length],['TAGs',tags.length],['Ciclos reversos',rev.length]];
+  function bars(title,rows){const max=Math.max(1,...rows.map(r=>r[1]));return '<div class="pchart"><h3>'+title+'</h3>'+rows.map(([name,n])=>'<div class="barrow"><span>'+name+'</span><div class="track"><div class="fill" style="width:'+(100*n/max)+'%"></div></div><b>'+fmt(n)+'</b></div>').join('')+'</div>'}
+  charts.innerHTML=bars('Situação técnica dos rastreadores',states)+bars('Visão geral de materiais',types);
+ }
+ q('portfolioExplore').onclick=()=>{const b=document.querySelector('#nav button[data-tab="reversa"]');if(b){b.click();b.scrollIntoView({block:'nearest'})}};
+ q('portfolioDemo').onclick=()=>{if(confirm('Adicionar registros fictícios identificados como demonstração? Os dados existentes serão preservados.'))addDemo()};
+ // Sem alterar o render ou o armazenamento dos módulos existentes.
+ const observer=new MutationObserver(()=>update());if(old)observer.observe(old,{childList:true});
+ document.querySelector('#nav')?.addEventListener('click',()=>setTimeout(update,0));
+ update();
+})();
+</script>
+
+<style id="smartstock-v026-layout">
+/* v0.28: grade única sem linhas internas que comprimiam os indicadores */
+body.tech-layout #painel #metrics, #painel #metrics{
+ display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,195px),1fr))!important;
+ gap:14px!important;align-items:stretch!important;width:100%!important;
+}
+#painel #metrics>.card{width:100%!important;min-width:0!important;min-height:108px!important;
+ display:flex!important;flex-direction:column!important;justify-content:space-between!important;
+ padding:16px 18px!important;overflow-wrap:normal!important;word-break:normal!important;
+ border-radius:14px!important;border-left:4px solid var(--metric-accent,#2563eb)!important;
+}
+#painel #metrics>.card .muted{font-size:13px!important;line-height:1.45!important;white-space:normal!important;overflow-wrap:break-word!important;color:var(--tech-muted,#64748b)}
+#painel #metrics>.card strong{font-size:30px!important;line-height:1.15!important;margin-top:12px!important;font-variant-numeric:tabular-nums}
+#painel #metrics>.card[data-group="chips"]{--metric-accent:#06b6d4}
+#painel #metrics>.card[data-group="rastreadores"]{--metric-accent:#7c3aed}
+#painel #metrics>.card[data-group="insumos"]{--metric-accent:#10b981}
+#painel #metrics>.card[data-group="reles"]{--metric-accent:#f59e0b}
+#painel #metrics>.card[data-group="protocolos"]{--metric-accent:#6366f1}
+@media(max-width:540px){#painel #metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}#painel #metrics>.card{min-height:100px!important;padding:12px!important}#painel #metrics>.card strong{font-size:26px!important}}
+@media(max-width:340px){#painel #metrics{grid-template-columns:1fr!important}}
+</style>
+<script id="smartstock-v026-fix">
+/* Preserva a função de renderização existente e apresenta os indicadores em uma grade plana. */
+arrangeMetricsV18=function(){
+ const container=document.getElementById('metrics');if(!container)return;
+ const current=Array.from(container.querySelectorAll('.card'));
+ const byName=new Map(current.map(c=>[c.querySelector('.muted')?.textContent?.trim(),c]));
+ const trackers=Array.isArray(db.equipment)?db.equipment:[];
+ const chips=Array.isArray(db.chips)?db.chips:[];
+ const supplies=Array.isArray(db.supplies)?db.supplies:[];
+ const quantities=[
+  ['CHIPs associados',chips.filter(c=>Boolean(c.imei)).length],
+  ['CHIPs cadastrados',chips.length],
+  ['Rastreadores sem CHIP',trackers.filter(e=>!chips.some(c=>c.imei===e.imei)).length],
+  ['Rastreadores com CHIP',trackers.filter(e=>chips.some(c=>c.imei===e.imei)).length],
+  ['Relês em estoque',supplies.filter(x=>/\brel[eê]s?\b/i.test(String(x.material||'').trim())).reduce((n,x)=>n+Number(x.quantidade||0),0)]
+ ];
+ for(const [name,value] of quantities){
+  let card=byName.get(name);
+  if(!card){card=document.createElement('div');card.className='card';card.innerHTML='<span class="muted"></span><strong></strong>';card.querySelector('.muted').textContent=name;byName.set(name,card)}
+  card.querySelector('strong').textContent=String(value);
+ }
+ const groups=[
+  ['TAGs'],
+  ['CHIPs disponíveis','CHIPs associados','CHIPs cadastrados'],
+  ['Rastreadores','Prontos no estoque','Em testes','Defeituosos','Rastreadores sem CHIP','Rastreadores com CHIP'],
+  ['Cabos em estoque'],['Relês em estoque'],['Protocolos abertos']
+ ];
+ const fragment=document.createDocumentFragment();
+ for(let i=0;i<groups.length;i++)for(const name of groups[i]){
+  const card=byName.get(name);if(!card)continue;
+  card.dataset.group=['tags','chips','rastreadores','insumos','reles','protocolos'][i];
+  fragment.appendChild(card);
+ }
+ container.replaceChildren(fragment);
+};
+arrangeMetricsV18();
+</script>
+
+<style id="smartstock-mobile-v027">
+/* Camada responsiva: não altera dados nem funções do estoque. */
+.mobile-backdrop,.mobile-bottom-nav{display:none}
+@media(max-width:760px){
+ html{overflow-x:hidden}body.tech-layout{width:100%;overflow-x:hidden;padding-bottom:calc(78px + env(safe-area-inset-bottom))}
+ body.tech-layout>header{padding:13px 12px 13px 58px!important;min-height:69px;gap:8px;flex-wrap:nowrap}
+ body.tech-layout>header h1{font-size:17px!important;line-height:1.25}
+ body.tech-layout>header small{font-size:10px}
+ body.tech-layout>header>span{display:none!important}
+ body.tech-layout>header .tech-mode{font-size:0!important;min-width:40px;min-height:40px;padding:8px!important;flex-shrink:0}
+ body.tech-layout>header .tech-mode::first-letter{font-size:19px}
+ body.tech-layout>main{width:100%;max-width:100%;padding:14px 12px 8px!important;margin:0 auto;min-width:0}
+ body.tech-layout .tech-page-title{gap:8px;flex-wrap:wrap;min-width:0}
+ body.tech-layout .tech-page-title small{font-size:11px;line-height:1.45}
+ body.tech-layout .tech-page-pill{font-size:10px;white-space:normal}
+ body.tech-layout .notice{font-size:12px;line-height:1.5;padding:11px 12px}
+ body.tech-layout .panel{min-width:0;max-width:100%;padding:15px 12px!important;overflow-wrap:anywhere}
+ body.tech-layout form{grid-template-columns:minmax(0,1fr)!important;gap:11px}
+ body.tech-layout form label,body.tech-layout form input,body.tech-layout form select,body.tech-layout form textarea{width:100%;min-width:0;max-width:100%}
+ body.tech-layout input,body.tech-layout select,body.tech-layout textarea{font-size:16px;min-height:44px}
+ body.tech-layout textarea{min-height:80px}
+ body.tech-layout button{touch-action:manipulation}
+ body.tech-layout .toolbar{align-items:stretch;gap:10px}
+ body.tech-layout .toolbar input{width:100%!important}
+ body.tech-layout .toolbar button{min-height:42px}
+ body.tech-layout .tablewrap{width:100%;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+ body.tech-layout .tablewrap table{min-width:580px}
+ body.tech-layout .rowactions{flex-wrap:wrap}
+ body.tech-layout #portfolioHero{min-width:0}
+ body.tech-layout #portfolioCharts{min-width:0}
+ body.tech-layout #portfolioCharts>*{min-width:0}
+ body.tech-layout .access-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ body.tech-layout .access-stat{padding:12px!important;min-width:0}
+ body.tech-layout .access-stat strong{font-size:22px}
+ body.tech-layout .batch-form label{min-width:0;flex-basis:100%}
+ body.tech-layout .batch-form button{min-width:0;width:100%}
+ body.tech-layout .tech-sidebar{z-index:105;width:min(85vw,310px);max-width:310px;overflow-y:auto;overscroll-behavior:contain}
+ body.tech-layout .tech-mobile-toggle{position:fixed;z-index:100;top:12px;left:10px;width:40px;height:42px;padding:8px!important;display:grid;place-items:center}
+ .mobile-backdrop{display:block;position:fixed;inset:0;background:#08142bb3;z-index:103;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s}
+ body.mobile-menu-open .mobile-backdrop{opacity:1;visibility:visible}
+ body.mobile-menu-open{overflow:hidden}
+ .mobile-bottom-nav{display:grid;position:fixed;z-index:90;bottom:0;left:0;right:0;grid-template-columns:repeat(5,minmax(0,1fr));background:#fff;border-top:1px solid #dfe7f5;box-shadow:0 -5px 24px #0f172a15;padding:7px 4px calc(7px + env(safe-area-inset-bottom));gap:2px}
+ .mobile-bottom-nav button,.mobile-bottom-nav button:not(:disabled){background:transparent!important;color:#65728d!important;border:0!important;box-shadow:none!important;min-width:0;min-height:48px;border-radius:10px!important;padding:5px 1px!important;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;font-size:10px!important;line-height:1.15}
+ .mobile-bottom-nav button .mob-icon{font-size:20px;line-height:1.1}
+ .mobile-bottom-nav button.active,.mobile-bottom-nav button.active:not(:disabled){background:#eaf0ff!important;color:#345bdc!important}
+ body.tech-dark .mobile-bottom-nav{background:#17233c;border-color:#35415b}
+ body.tech-dark .mobile-bottom-nav button{color:#b4c0d9!important}
+ body.tech-dark .mobile-bottom-nav button.active{background:#263d70!important;color:#c4d6ff!important}
+ body.tech-layout footer{padding:0 12px 8px;font-size:11px}
+}
+@media(max-width:390px){body.tech-layout #painel #metrics>.card{padding:11px!important}body.tech-layout #painel #metrics>.card .muted{font-size:11px!important}body.tech-layout #painel #metrics>.card strong{font-size:24px!important}.mobile-bottom-nav button{font-size:9px!important}}
+@media(min-width:761px){.mobile-backdrop,.mobile-bottom-nav{display:none!important}}
+</style>
+<script id="smartstock-mobile-v027-script">
+(function(){
+ function init(){
+  const aside=document.querySelector('.tech-sidebar'),nav=document.getElementById('nav');
+  if(!aside||!nav||document.querySelector('.mobile-bottom-nav'))return;
+  const backdrop=document.createElement('div');backdrop.className='mobile-backdrop';backdrop.setAttribute('aria-hidden','true');document.body.appendChild(backdrop);
+  const bottom=document.createElement('nav');bottom.className='mobile-bottom-nav';bottom.setAttribute('aria-label','Acesso rápido no celular');
+  const tabs=[['painel','▦','Painel'],['recebimentos','⇩','Receber'],['equipamentos','◈','Estoque'],['movimentos','⇄','Movimentos'],['menu','☰','Menu']];
+  function closeMenu(){aside.classList.remove('open');document.body.classList.remove('mobile-menu-open');const t=document.querySelector('.tech-mobile-toggle');if(t)t.setAttribute('aria-expanded','false')}
+  function sync(){const current=nav.querySelector('button.active')?.dataset.tab;bottom.querySelectorAll('button[data-tab]').forEach(b=>{const active=b.dataset.tab===current;b.classList.toggle('active',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')})}
+  for(const [id,ic,label] of tabs){const b=document.createElement('button');b.type='button';b.dataset.tab=id;b.innerHTML='<span class="mob-icon" aria-hidden="true">'+ic+'</span><span>'+label+'</span>';b.addEventListener('click',()=>{if(id==='menu'){const t=document.querySelector('.tech-mobile-toggle');t?.click();return}const target=nav.querySelector('button[data-tab="'+id+'"]');target?.click();closeMenu();sync();window.scrollTo({top:0,behavior:'instant'})});bottom.appendChild(b)}
+  document.body.appendChild(bottom);backdrop.addEventListener('click',closeMenu);
+  const toggle=document.querySelector('.tech-mobile-toggle');if(toggle){toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-controls','nav');toggle.addEventListener('click',()=>{document.body.classList.toggle('mobile-menu-open',aside.classList.contains('open'));toggle.setAttribute('aria-expanded',String(aside.classList.contains('open')))})}
+  nav.addEventListener('click',()=>{closeMenu();setTimeout(sync,0)});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
+  const badge=document.querySelector('body>header>span');if(badge)badge.textContent='v0.28 • Mobile Responsivo';
+  const sidefoot=document.querySelector('.tech-sidebar-footer');if(sidefoot)sidefoot.textContent=sidefoot.textContent.replace('v0.28','v0.28');
+  sync();
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+<script id="smartstock-pwa-v028">
+// Cache only the public application shell. Never cache imported inventory, backups, or API responses.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js', {scope:'./'}).catch(err => console.warn('PWA indisponível:', err));
+  });
+}
+</script>
+<script src="./operations.js"></script></body></html>

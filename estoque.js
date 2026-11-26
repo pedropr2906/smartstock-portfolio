@@ -1,6 +1,6 @@
 'use strict';
 const products = [
-  ['P-101', 'Luva de proteção', 'Suprimentos', 'un', 8, 'Almoxarifado', 24],
+  ['P-101', 'Luva de proteção', 'Suprimentos', 'par', 5, 'Almoxarifado', 8],
   ['P-102', 'Cabo de rede', 'Manutenção', 'm', 15, 'Oficina', 10],
   ['P-103', 'Caixa para expedição', 'Embalagens', 'cx', 4, 'Depósito', 12]
 ].map(([sku, nome, categoria, unidade, minimo, local, saldo]) => ({
@@ -27,7 +27,7 @@ function display() {
       if (!normal(fields.join(' ')).includes(normal(busca.value))) continue;
       const saldo = units / 1000;
       const row = body.insertRow();
-      for (const field of [...fields, format(saldo) + ' ' + p.unidade, format(p.minimo), saldo === 0 ? 'Sem estoque' : saldo < p.minimo ? 'Repor' : 'Disponível']) {
+      for (const field of [...fields, format(saldo) + ' ' + p.unidade, format(p.minimo), saldo === 0 ? 'Sem estoque' : saldo <= p.minimo ? 'Repor' : 'Disponível']) {
         row.insertCell().textContent = field;
       }
     }
@@ -76,6 +76,12 @@ movimento.addEventListener('submit', event => {
     path += ' → ' + target;
   }
   p.locais.set(local, balance + (tipo === 'Entrada' ? qty : -qty));
+  const current = p.locais.get(local) / 1000;
+  if (tipo !== 'Entrada' && balance / 1000 > p.minimo && current <= p.minimo) {
+    const aviso = document.querySelector('#aviso');
+    aviso.hidden = false;
+    aviso.querySelector('p').textContent = p.nome + ' · ' + local + ' · Saldo: ' + format(current) + ' ' + p.unidade + '. Mínimo: ' + format(p.minimo) + ' ' + p.unidade + '. Providencie a compra para reposição. Simulação sem envio.';
+  }
   const entry = document.createElement('li');
   entry.textContent = [new Date().toLocaleTimeString('pt-BR'), tipo, p.sku, format(qty / 1000) + ' ' + p.unidade, path].join(' · ');
   const log = document.querySelector('#historico');

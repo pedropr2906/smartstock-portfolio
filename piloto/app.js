@@ -10,7 +10,7 @@ function render() {
     const labels = [p.sku, p.nome, p.categoria, p.local];
     if (!labels.join(' ').toLocaleLowerCase().includes(el('busca').value.trim().toLocaleLowerCase())) continue;
     const row = body.insertRow();
-    const status = p.saldo === 0 ? 'Sem estoque' : p.saldo < p.minimo ? 'Repor' : 'Disponível';
+    const status = p.saldo === 0 ? 'Sem estoque' : p.saldo <= p.minimo ? 'Repor' : 'Disponível';
     for (const value of [...labels, format(p.saldo) + ' ' + p.unidade, format(p.minimo), status]) row.insertCell().textContent = value;
   }
   if (!body.rows.length) {

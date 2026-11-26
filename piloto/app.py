@@ -6,6 +6,7 @@ import json
 import os
 import sqlite3
 import unicodedata
+import uuid
 from contextlib import closing
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
@@ -19,6 +20,7 @@ SCHEMA = """
 CREATE TABLE IF NOT EXISTS product(sku TEXT PRIMARY KEY, nome TEXT, categoria TEXT, unidade TEXT, minimo INTEGER);
 CREATE TABLE IF NOT EXISTS position(sku TEXT, local TEXT, saldo INTEGER NOT NULL CHECK(saldo BETWEEN 0 AND 1000000000000000), PRIMARY KEY(sku,local));
 CREATE TABLE IF NOT EXISTS event(id INTEGER PRIMARY KEY, instante TEXT DEFAULT CURRENT_TIMESTAMP, autor TEXT, tipo TEXT, sku TEXT, origem TEXT, destino TEXT, quantidade INTEGER, pedido TEXT UNIQUE);
+CREATE TABLE IF NOT EXISTS ss_email_estoque(id TEXT PRIMARY KEY, unidade_id TEXT, material TEXT, local TEXT, saldo TEXT, minimo TEXT, medida TEXT, enviado INTEGER DEFAULT 0, proxima INTEGER DEFAULT 0, token TEXT);
 """
 with closing(sqlite3.connect(DB)) as db:
     db.executescript(SCHEMA)
@@ -57,7 +59,7 @@ def apply(db, data, user, role):
     target = ""
     if kind == "Cadastro":
         unit = field(data, "unidade")
-        if unit not in ("un", "kg", "m", "L", "cx"):
+        if unit not in ("un", "par", "kg", "m", "L", "cx"):
             raise ValueError("Unidade inválida.")
         if db.execute("SELECT 1 FROM product WHERE sku=?", (sku,)).fetchone():
             raise ValueError("Código já cadastrado.")
@@ -77,6 +79,12 @@ def apply(db, data, user, role):
                 raise ValueError("Origem e destino devem ser diferentes.")
             db.execute("INSERT INTO position VALUES(?,?,?) ON CONFLICT(sku,local) DO UPDATE SET saldo=saldo+excluded.saldo", (sku,target,qty))
         db.execute("UPDATE position SET saldo=saldo+? WHERE sku=? AND local=?", (qty if kind == "Entrada" else -qty,sku,location))
+        if kind != "Entrada":
+            nome, minimo, medida = db.execute("SELECT nome,minimo,unidade FROM product WHERE sku=?",(sku,)).fetchone()
+            saldo = row[0] - qty
+            if row[0] > minimo >= saldo:
+                db.execute("INSERT INTO ss_email_estoque(id,unidade_id,material,local,saldo,minimo,medida) VALUES(?,?,?,?,?,?,?)",
+                           (uuid.uuid4().hex,location,nome,location,str(Decimal(saldo)/1000),str(Decimal(minimo)/1000),medida))
     db.execute("INSERT INTO event(autor,tipo,sku,origem,destino,quantidade,pedido) VALUES(?,?,?,?,?,?,?)", (user,kind,sku,location,target,qty,key))
 
 

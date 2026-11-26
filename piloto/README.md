@@ -13,3 +13,10 @@ Na raiz do projeto, execute `python3 piloto/app.py` e abra http://127.0.0.1:8080
 As alterações são gravadas em transação. A consulta exibe até 100 eventos recentes. Use Atualizar saldos para buscar alterações de outros usuários. A operação de ativos serializados do portfólio permanece separada. Antes de receber dados reais, validar hospedagem, restauração de backup, gestão de credenciais e operação com uma empresa piloto.
 
 Para repetir os testes de integração, a partir da raiz execute `python3 piloto/teste_integracao.py` com a porta local 8080 livre. O teste cria usuários e banco temporários, simula movimentações, reinicia o servidor e abre uma cópia restaurada. Nenhum cadastro de cliente é necessário.
+
+## Alerta de reposição por e-mail
+
+Uma baixa que cruza o mínimo para baixo, inclusive igualdade, grava o aviso na mesma transação do saldo. Uma reposição acima do limite permite novo alerta. A aplicação registra o saldo no momento da baixa. O envio usa uma fila persistente e SMTP sobre TLS, com nova tentativa após cinco minutos. Se o servidor SMTP aceitar uma mensagem e a confirmação se perder, a tentativa seguinte poderá reenviá-la com o mesmo Message-ID.
+
+Configure no ambiente privado do processo SMARTSTOCK_SMTP_HOST, SMARTSTOCK_SMTP_USER, SMARTSTOCK_SMTP_PASSWORD, SMARTSTOCK_FROM (endereço simples) e, opcionalmente, SMARTSTOCK_SMTP_PORT (465 por padrão). Nunca coloque credenciais no front-end. Execute o consumidor periodicamente no servidor existente. Falhas retornam status diferente de zero ao agendador.
+Configure SMARTSTOCK_MANAGER_EMAIL para o gestor desta instalação e execute python3 piloto/alertas.py a cada minuto com SMARTSTOCK_DB apontando para o banco do piloto.

@@ -1,0 +1,32 @@
+name: APK de homologação
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/android-piloto.yml']
+permissions:
+  contents: read
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: python3 mobile/preparar.py "$RUNNER_TEMP/smartstock" --org io.github.pedropr2906 --projeto smartstockpiloto --nome "SmartStock Piloto"
+      - name: Compilar Android arm64
+        run: |
+          cd "$RUNNER_TEMP/smartstock"
+          flutter build apk --debug --target-platform android-arm64 --dart-define="APP_NAME=SmartStock Piloto"
+          cp build/app/outputs/flutter-apk/app-debug.apk "$GITHUB_WORKSPACE/SmartStock-Piloto.apk"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SmartStock-Piloto-Android
+          path: SmartStock-Piloto.apk
+          retention-days: 7
